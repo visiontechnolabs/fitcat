@@ -24,15 +24,30 @@ class Login extends CI_Controller {
         }
 
         
-        $otp = rand(100000, 999999);
-        $this->session->set_userdata('otp', $otp);
-        $this->session->set_userdata('mobile', $mobile);
+        // $otp = rand(100000, 999999);
+        // $this->session->set_userdata('otp', $otp);
+        // $this->session->set_userdata('mobile', $mobile);
 
        
-        $this->send_otp_via_sms($mobile, $otp);
+        // $this->send_otp_via_sms($mobile, $otp);
 
-        $this->session->set_flashdata('success', 'OTP sent successfully.');
-        $this->load->view('otp_form');
+        // $this->session->set_flashdata('success', 'OTP sent successfully.');
+         $query = $this->db->get_where('users', ['mobile' => $mobile]);
+            $user = $query->row_array();
+              if ($user) {
+                
+                if ($user['role'] == 1) {
+                    redirect('admin/dashboard');
+                } elseif ($user['role'] == 2) {
+                $this->session->set_userdata('provider', $user);
+
+                    redirect('provider/dashboard');
+                } else {
+                    redirect('user/dashboard');
+                }
+
+            }
+        
     }
 
     public function verify_otp() {

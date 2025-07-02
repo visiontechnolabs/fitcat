@@ -65,7 +65,7 @@
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
 				<li>
-					<a href="<?= base_url('admin/dashboard');?>" class="">
+					<a href="<?= base_url('provider/dashboard');?>" class="">
 						<div class="parent-icon"><i class='bx bx-home-alt'></i>
 						</div>
 						<div class="menu-title">Dashboard</div>

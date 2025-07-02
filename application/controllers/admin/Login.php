@@ -22,7 +22,7 @@ class Login extends CI_Controller
 		$this->load->library('form_validation');
 
 		$this->load->library('session');
-        $this->load->helper(['url', 'form']);
+		$this->load->helper(['url', 'form']);
 
 
 		$this->load->model('general_model');
@@ -39,7 +39,7 @@ class Login extends CI_Controller
 
 		if ($method != 'logout' && $this->session->userdata('admin')) {
 
-			redirect('dashboard_admin');
+			redirect('admin/dashboard');
 
 		}
 
@@ -85,14 +85,14 @@ class Login extends CI_Controller
 			if ($user) {
 
 
-				
+
 				$session = array(
 
 
 
 					'id' => $user->id,
 
-					
+
 					'name' => $user->name,
 
 					'gym_name' => $user->store_name,
@@ -106,7 +106,7 @@ class Login extends CI_Controller
 
 				$this->session->set_flashdata('success', 'You have logged in successfully!');
 
-				redirect('dashboard_admin', 'refresh');
+				redirect('admin/dashboard');
 
 			} else {
 
