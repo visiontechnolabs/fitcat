@@ -62,20 +62,33 @@ class General_model extends CI_Model
         return $query->result_array();  
     }
 
-    public function getCurrentMonthCustomers()
-    {
-        $query = $this->db->query("
-            SELECT * FROM customers 
-            WHERE MONTH(purchase_date) = MONTH(CURRENT_DATE()) 
-            AND YEAR(purchase_date) = YEAR(CURRENT_DATE())
-        ");
-    
-        return $query->result_array(); // Returns all matching records as an array
+  // Count with optional search
+public function count_with_search($table, $params = [])
+{
+    if (isset($params['search'])) {
+        $this->db->group_start();
+        foreach ($params['search'] as $field => $keyword) {
+            $this->db->or_like($field, $keyword);
+        }
+        $this->db->group_end();
     }
-                public function getCustomersAfter90Days()
-            {
-                $this->db->where('DATE(purchase_date) <=', date('Y-m-d', strtotime('-90 days')));
-                $query = $this->db->get('customers');
-                return $query->result();
-            }
+    return $this->db->count_all_results($table);
+}
+
+// Fetch with optional search, limit, and offset
+public function get_with_search($table, $params = [], $limit = 10, $offset = 0)
+{
+    if (isset($params['search'])) {
+        $this->db->group_start();
+        foreach ($params['search'] as $field => $keyword) {
+            $this->db->or_like($field, $keyword);
+        }
+        $this->db->group_end();
+    }
+
+    $this->db->limit($limit, $offset);
+    $query = $this->db->get($table);
+    return $query->result_array();
+}
+
     }

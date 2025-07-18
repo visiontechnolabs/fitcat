@@ -38,7 +38,7 @@
 <link rel="stylesheet" href="<?= base_url('assets/sass/bordered-theme.css') ?>">
 
 	
-	<title>Venus-automobile Dashboard</title>
+	<title>FITCKET-ADMIN</title>
 	<script>
 		(function () {
 			var savedTheme = localStorage.getItem('theme') || 'light';
@@ -54,10 +54,10 @@
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
 				<div>
-					<img src="<?= base_url('assets/images/logo-img.png');?>" class="logo-icon img-fluid" alt="logo icon" style="width:100%;">
+					<!-- <img src="<?= base_url('assets/images/logo-img.png');?>" class="logo-icon img-fluid" alt="logo icon" style="width:100%;"> -->
 				</div>
 				<div>
-					<h4 class="logo-text"></h4>
+					<h4 class="logo-text">FITCKET | ADMIN</h4>
 				</div>
 				<div class="mobile-toggle-icon ms-auto"><i class='bx bx-x'></i>
 				</div>
@@ -74,33 +74,104 @@
 				</li>
               <li>
 					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon"><i class="bx bx-message-square-edit"></i>
+						<div class="parent-icon"><i class="bx bx-category"></i>
 						</div>
-						<div class="menu-title">Enquires</div>
+						<div class="menu-title">Category</div>
 					</a>
 					<ul>
-						<li> <a href="<?= base_url('enquries');?>"><i class='bx bx-radio-circle'></i>All Enquries</a>
+						<li> <a href="<?= base_url('category');?>"><i class='bx bx-radio-circle'></i>All Category</a>
 						</li>
-						<li> <a href="<?= base_url('add_enquries');?>"><i class='bx bx-radio-circle'></i>Add new</a>
+						<li> <a href="<?= base_url('add_category');?>"><i class='bx bx-radio-circle'></i>Add new Category</a>
 						</li>
 						
 					</ul>
 			 </li>
               <li>
 					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon"><i class="bx bx-user-circle"></i>
+						<div class="parent-icon"><i class="bx bx-collection"></i>
 						</div>
-						<div class="menu-title">Customers</div>
+						<div class="menu-title">Sub Category</div>
 					</a>
 					<ul>
-						<li> <a href="<?= base_url('customer');?>"><i class='bx bx-radio-circle'></i>All Customer</a>
+						<li> <a href="<?= base_url('sub_category');?>"><i class='bx bx-radio-circle'></i>All Sub Category</a>
 						</li>
-						<li> <a href="<?= base_url('add_customer');?>"><i class='bx bx-radio-circle'></i>Add Customer</a>
+						<li> <a href="<?= base_url('add_sub_category');?>"><i class='bx bx-radio-circle'></i>Add Sub Category</a>
 						</li>
 						
 					</ul>
 			 </li>
+			 <li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-image"></i>
+						</div>
+						<div class="menu-title">Home Slider</div>
+					</a>
+					<ul>
+						<li> <a href="<?= base_url('slider');?>"><i class='bx bx-radio-circle'></i>All Slider</a>
+						</li>
+						<li> <a href="<?= base_url('add_slider');?>"><i class='bx bx-radio-circle'></i>Add Slider</a>
+						</li>
+						
+					</ul>
+			 </li>
+			 <li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-user-circle"></i>
+						</div>
+						<div class="menu-title">Partner</div>
+					</a>
+					<ul>
+						<li> <a href="<?= base_url('customer');?>"><i class='bx bx-radio-circle'></i>All Partner</a>
+						</li>
+						<li> <a href="<?= base_url('add_customer');?>"><i class='bx bx-radio-circle'></i>Add Partner</a>
+						</li>
+						
+					</ul>
+			 </li>
+			 <li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-map"></i>
+						</div>
+						<div class="menu-title">City</div>
+					</a>
+					<ul>
+						<li> <a href="<?= base_url('customer');?>"><i class='bx bx-radio-circle'></i>All City</a>
+						</li>
+						<li> <a href="<?= base_url('add_customer');?>"><i class='bx bx-radio-circle'></i>Add City</a>
+						</li>
+						
+					</ul>
+			 </li>
+			<li class="">
+							<a href="widgets.html" aria-expanded="false">
+								<div class="parent-icon"><i class="bx bx-group"></i>
+								</div>
+								<div class="menu-title">Customers</div>
+							</a>
+						</li>
+				<li class="">
+							<a href="widgets.html" aria-expanded="false">
+								<div class="parent-icon"><i class="bx bx-book-bookmark"></i>
+								</div>
+								<div class="menu-title">Booking</div>
+							</a>
+						</li>
+				<li class="">
+							<a href="widgets.html" aria-expanded="false">
+								<div class="parent-icon"><i class="bx bx-rupee"></i>
+								</div>
+								<div class="menu-title">Payment</div>
+							</a>
+						</li>
+				<li class="">
+							<a href="widgets.html" aria-expanded="false">
+								<div class="parent-icon"><i class="bx bx-comment-dots"></i>
+								</div>
+								<div class="menu-title">Client Review</div>
+							</a>
+						</li>
 			 </ul>
+
 			<!--end navigation-->
 		</div>
 		<!--end sidebar wrapper -->

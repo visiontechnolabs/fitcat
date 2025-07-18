@@ -145,8 +145,12 @@
 
 <script src="<?= base_url('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
+<script>
+  const site_url = "<?= base_url(); ?>";
+</script>
+  
 
-<script src="<?= base_url('assets/js/custome.js') ?>?v=<?= time() ?>"></script>
+<script src="<?= base_url('assets/js/custom.js') ?>?v=<?= time() ?>"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -155,8 +159,7 @@
 <script src="https://unpkg.com/libphonenumber-js@1.10.14/bundle/libphonenumber-js.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/eruda"></script>
-<script>eruda.init();</script>
+
 
 
 <!--app JS-->
@@ -165,20 +168,13 @@
 
 <script src="<?= base_url('assets/js/index.js') ?>"></script>
 
-<script src="<?= base_url('assets/plugins/peity/jquery.peity.min.js') ?>"></script>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
-<script src="<?= base_url('assets/js/firebase-messaging.js') ?>"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/eruda"></script> -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 		<script src="https://www.gstatic.com/charts/loader.js"></script>
-<!-- <script>eruda.init();</script></script> -->
+
 <script>
-  const site_url = "<?= base_url(); ?>";
 
 
-  $(".data-attributes span").peity("donut")
+  // $(".data-attributes span").peity("donut")
 
 
 
@@ -275,80 +271,7 @@ $("#show_hide_password a").on('click', function (event) {
 
 
 
-const STORE_ID = <?= isset($user_data->id) ? (int) $user_data->id : 0 ?>;
 
-
-  if (!firebase.apps.length) {
-    // alert('enter in first condtion');
-    firebase.initializeApp(firebaseConfig);
-  }
-
-  if (!window.messaging) {
-     window.messaging = firebase.messaging();
-  }
-
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then(function (registration) {
-          console.log('ServiceWorker registered with scope:', registration.scope);
-
-        }, function (err) {
-          console.log('ServiceWorker registration failed:', err);
-        });
-    });
-
-  }
- google.charts.load('current', { packages: ['corechart'] });
-  google.charts.setOnLoadCallback(drawChart);
-
-  function drawChart() {
-    const data = google.visualization.arrayToDataTable([
-      ['Month', 'Orders'],
-      <?php
-        $months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        foreach ($months as $index => $month) {
-          $orderCount = isset($monthly_orders[$index]) ? $monthly_orders[$index] : 0;
-          echo "['$month', $orderCount],";
-        }
-      ?>
-    ]);
-
-    const options = {
-      legend: 'none',
-      curveType: 'function',
-      colors: ['#007bff'],
-      areaOpacity: 0.25,
-      pointSize: 6,
-      lineWidth: 3,
-      animation: {
-        startup: true,
-        duration: 1000,
-        easing: 'out'
-      },
-      hAxis: {
-        textStyle: { fontSize: 10, color: '#888' },
-        slantedText: true,
-        slantedTextAngle: 45
-      },
-      vAxis: {
-        textStyle: { fontSize: 10, color: '#888' },
-        gridlines: { color: '#e5e5e5' },
-        minValue: 0
-      },
-      chartArea: {
-        left: 30,
-        top: 10,
-        width: '90%',
-        height: '75%'
-      }
-    };
-
-    const chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-
-  window.addEventListener('resize', drawChart);
 </script>
 
 </body>

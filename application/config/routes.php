@@ -49,10 +49,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'home';
 $route['provider'] = 'login';
 $route['admin'] = 'admin/login';
 $route['dashboard_admin'] = 'admin/dashboard';
+
+// admin routes
+$route['category'] = 'admin/category';
+$route['add_category'] = 'admin/category/add_category';
+$route['sub_category'] = 'admin/category/sub_category';
+$route['add_sub_category'] = 'admin/category/add_sub_category';
+$route['edit/(:num)'] = 'admin/category/edit/$1';
+$route['edit_main/(:num)'] = 'admin/category/edit_main/$1';
+$route['slider'] = 'admin/category/slider';
+$route['add_slider'] = 'admin/category/add_slider';
+$route['city'] = 'admin/category/city';
+$route['add_city'] = 'admin/category/add_city';
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
