@@ -28,13 +28,13 @@
 								<thead class="table-light">
 									<tr>
 										<th>Index</th>
-										<th>Image</th>
-										<th>Title</th>
+										<th>State</th>
+                                        <th>City</th>
 										<th>Staus</th>
 										<th>Actions</th>
 									</tr>
 								</thead>
-								<tbody id="categoryTableBody">
+								<tbody id="cityTableBody">
 									
 								</tbody>
 							</table>
@@ -58,4 +58,4 @@
 
 			</div>
 		</div>
-		
+      

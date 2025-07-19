@@ -587,4 +587,158 @@ public function create(){
     }
 }
 
+public function city(){
+
+$this->load->view('admin/header');
+$this->load->view('admin/city_view');
+$this->load->view('admin/footer');
+
+}
+public function add_city(){
+$this->load->view('admin/header');
+$this->load->view('admin/city_form');
+$this->load->view('admin/footer');
+
+}
+
+public function save_city()
+{
+    $state = $this->input->post('state');
+    $city = $this->input->post('city');
+
+   
+    if (empty($state) || empty($city)) {
+        echo json_encode(['success' => false]);
+        return;
     }
+
+   
+    $exist = $this->general_model->getOne('cities', [
+        'state' => $state,
+        'city'  => $city
+    ]);
+
+    if ($exist) {
+        echo json_encode(['success' => 'exist']);
+        return;
+    }
+
+   
+    $data = [
+        'state'      => $state,
+        'city'       => $city,
+        'created_on' => date('Y-m-d H:i:s')
+    ];
+
+    $this->general_model->insert('cities', $data);
+    $insert_id = $this->db->insert_id();
+
+    echo json_encode(['success' => (bool) $insert_id]);
+}
+public function ajax_list_city(){
+     $search = $this->input->post('search');
+    $page   = $this->input->post('page');
+    $limit  = 10;
+    $offset = ($page - 1) * $limit;
+
+    $this->db->select('*');
+    $this->db->from('cities');
+    if (!empty($search)) {
+        $this->db->like('city', $search);
+        $this->db->or_like('state', $search);
+    }
+    $this->db->limit($limit, $offset);
+    $query = $this->db->get();
+    $cities = $query->result();
+
+    // Total rows
+    $this->db->from('cities');
+    if (!empty($search)) {
+        $this->db->like('city', $search);
+        $this->db->or_like('state', $search);
+    }
+    $total_rows = $this->db->count_all_results();
+
+    echo json_encode([
+        'data'         => $cities,
+        'total_pages'  => ceil($total_rows / $limit),
+        'current_page' => $page,
+        'start'        => $offset
+    ]);
+}
+public function toggle_status_city(){
+    if ($this->input->method() === 'post') {
+            $id = $this->input->post('id');
+            $status = $this->input->post('status');
+
+            if (is_numeric($id) && ($status === '0' || $status === '1')) {
+                // $this->load->model('Category_model');
+
+                $where = ['id' => $id];
+                $data = ['isActive' => $status];
+
+                $update = $this->general_model->update('cities', $where, $data);
+
+
+                if ($update) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => $status == '1' ? 'Published successfully' : 'Unpublished successfully'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'message' => 'Failed to update status'
+                    ]);
+                }
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'message' => 'Invalid input'
+                ]);
+            }
+        }
+}
+
+public function edit_city($id){
+$cities = $this->general_model->getOne('cities', ['id' => $id]);
+
+    if (!$cities) {
+        show_404();
+    }
+
+    $data['city'] = $cities;
+    //    echo "<pre>";
+    //    print_r($data['city']);
+    //    die;
+        $this->load->view('admin/header');
+        $this->load->view('admin/edit_city_form',$data);
+        $this->load->view('admin/footer');
+}
+public function update_city()
+{
+    $city_id = $this->input->post('city_id');
+    $state = trim($this->input->post('state'));
+    $city = trim($this->input->post('city'));
+
+    if (empty($city_id) || empty($state) || empty($city)) {
+        echo json_encode(['status' => 'error', 'message' => 'All fields are required']);
+        return;
+    }
+
+    $update = [
+        'state' => $state,
+        'city' => $city
+    ];
+
+    $this->db->where('id', $city_id);
+    $result = $this->db->update('cities', $update);
+
+    if ($result) {
+        echo json_encode(['status' => 'success']);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Update failed']);
+    }
+}
+
+}

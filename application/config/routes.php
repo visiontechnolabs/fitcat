@@ -65,6 +65,8 @@ $route['slider'] = 'admin/category/slider';
 $route['add_slider'] = 'admin/category/add_slider';
 $route['city'] = 'admin/category/city';
 $route['add_city'] = 'admin/category/add_city';
+$route['edit_city/(:num)'] = 'admin/category/edit_city/$1';
+
 
 
 

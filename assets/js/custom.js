@@ -167,7 +167,9 @@ $(document).ready(function () {
         </td>
         <td>
           <div class="d-flex order-actions align-items-center">
-           		<a href="${site_url}edit_main/${row.id}" class="me-2"><i class="bx bxs-edit"></i></a>
+           		<a href="${site_url}edit_main/${
+				row.id
+			}" class="me-2"><i class="bx bxs-edit"></i></a>
 
             ${
 							row.isActive == 1
@@ -266,6 +268,36 @@ $(document).on("click", ".toggle-status-btn", function () {
 		},
 	});
 });
+$(document).on("click", ".toggle-status-btn_city", function () {
+	const button = $(this);
+	const postId = button.data("id");
+	const newStatus = button.data("status");
+
+	$.ajax({
+		url: site_url + "admin/category/toggle_status_city",
+		type: "POST",
+		data: { id: postId, status: newStatus },
+		dataType: "json",
+		success: function (res) {
+			if (res.success) {
+				Swal.fire({
+					icon: "success",
+					title: res.message,
+					timer: 2000,
+					showConfirmButton: false,
+				});
+				setTimeout(function () {
+					location.reload();
+				}, 2000);
+			} else {
+				Swal.fire("Error", res.message, "error");
+			}
+		},
+		error: function () {
+			Swal.fire("Error", "Something went wrong!", "error");
+		},
+	});
+});
 // subcategory
 $(document).ready(function () {
 	const perPage = 3;
@@ -321,8 +353,12 @@ $(document).ready(function () {
 		<a href="${site_url}edit/${row.id}" class="me-2"><i class="bx bxs-edit"></i></a>
 
 		<!-- Publish / Unpublish Button with Icon -->
-		<button class="btn btn-sm btn-${row.isActive == 1 ? "danger" : "success"} toggle-status-btn"
-			data-id="${row.id}" data-status="${row.isActive == 1 ? 0 : 1}" title="${row.isActive == 1 ? "Unpublish" : "Publish"}">
+		<button class="btn btn-sm btn-${
+			row.isActive == 1 ? "danger" : "success"
+		} toggle-status-btn"
+			data-id="${row.id}" data-status="${row.isActive == 1 ? 0 : 1}" title="${
+					row.isActive == 1 ? "Unpublish" : "Publish"
+				}">
 			<i class="bx ${row.isActive == 1 ? "bx-x-circle" : "bx-check-circle"} me-1"></i>
 			${row.isActive == 1 ? "Unpublish" : "Publish"}
 		</button>
@@ -405,198 +441,203 @@ $(document).ready(function () {
 	loadSubcategories(currentPage);
 });
 
-$('#EditSubcategoryForm').on('submit', function (e) {
-        e.preventDefault(); // Prevent form from submitting normally
+$("#EditSubcategoryForm").on("submit", function (e) {
+	e.preventDefault(); // Prevent form from submitting normally
 
-        let form = $(this)[0];
-        let formData = new FormData(form);
+	let form = $(this)[0];
+	let formData = new FormData(form);
 
-        $.ajax({
-            url: site_url + "admin/category/edit_subcategory",
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            beforeSend: function () {
-                // Optional: Show loading spinner
-            },
-           success: function (response) {
-    if (response.status) {
-        Swal.fire({
-            icon: 'success',
-            title: 'Updated',
-            text: response.message,
-            timer: 2000,
-            showConfirmButton: false
-        }).then(() => {
-                        window.location.href = site_url + 'sub_category';
+	$.ajax({
+		url: site_url + "admin/category/edit_subcategory",
+		type: "POST",
+		data: formData,
+		processData: false,
+		contentType: false,
+		dataType: "json",
+		beforeSend: function () {
+			// Optional: Show loading spinner
+		},
+		success: function (response) {
+			if (response.status) {
+				Swal.fire({
+					icon: "success",
+					title: "Updated",
+					text: response.message,
+					timer: 2000,
+					showConfirmButton: false,
+				}).then(() => {
+					window.location.href = site_url + "sub_category";
+				});
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: response.message,
+				});
+			}
+		},
+		error: function () {
+			Swal.fire({
+				icon: "error",
+				title: "AJAX Error",
+				text: "Something went wrong with the request.",
+			});
+		},
+	});
+});
+$("#editCategoryForm").on("submit", function (e) {
+	e.preventDefault();
+	// alert('hh');
+	// return;
+	var formData = new FormData(this);
 
-        });
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: response.message
-        });
-    }
-},
-            error: function () {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'AJAX Error',
-                    text: 'Something went wrong with the request.'
-                });
-            }
-        });
-    });
-$('#editCategoryForm').on('submit', function (e) {
-    e.preventDefault();
-// alert('hh');
-// return;
-    var formData = new FormData(this);
-
-    $.ajax({
-        url: site_url + "admin/category/update_main_cat",
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
-        dataType: "json",
-        success: function (response) {
-            if (response.status) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Updated',
-                    text: response.message,
-                    timer: 2000,
-                    showConfirmButton: false
-                }).then(() => {
-                    window.location.href = site_url + 'category';
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: response.message
-                });
-            }
-        },
-        error: function () {
-            Swal.fire("Error", "Something went wrong!", "error");
-        }
-    });
+	$.ajax({
+		url: site_url + "admin/category/update_main_cat",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+		dataType: "json",
+		success: function (response) {
+			if (response.status) {
+				Swal.fire({
+					icon: "success",
+					title: "Updated",
+					text: response.message,
+					timer: 2000,
+					showConfirmButton: false,
+				}).then(() => {
+					window.location.href = site_url + "category";
+				});
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: response.message,
+				});
+			}
+		},
+		error: function () {
+			Swal.fire("Error", "Something went wrong!", "error");
+		},
+	});
 });
 
 $(document).ready(function () {
-    $('#SliderForm').on('submit', function (e) {
-        e.preventDefault();
-// alert('h');
-// return;
-        // Clear validation styles
-        $('#SliderForm').find('.is-invalid').removeClass('is-invalid');
+	$("#SliderForm").on("submit", function (e) {
+		e.preventDefault();
+		// alert('h');
+		// return;
+		// Clear validation styles
+		$("#SliderForm").find(".is-invalid").removeClass("is-invalid");
 
-        let isValid = true;
+		let isValid = true;
 
-        // Validate title
-        if ($('#sliderTitle').val().trim() === '') {
-            $('#sliderTitle').addClass('is-invalid');
-            isValid = false;
-        }
+		// Validate title
+		if ($("#sliderTitle").val().trim() === "") {
+			$("#sliderTitle").addClass("is-invalid");
+			isValid = false;
+		}
 
-        // Validate image (only if creating new; skip if editing and image already exists)
-        const imageFile = $('#slider_image')[0].files[0];
-        if (!imageFile) {
-            // $('#slider_image').addClass('is-invalid');
-            isValid = false;
-        }
+		// Validate image (only if creating new; skip if editing and image already exists)
+		const imageFile = $("#slider_image")[0].files[0];
+		if (!imageFile) {
+			// $('#slider_image').addClass('is-invalid');
+			isValid = false;
+		}
 
-        // Validate display order
-        if ($('#displayOrder').val() === '') {
-            $('#displayOrder').addClass('is-invalid');
-            isValid = false;
-        }
+		// Validate display order
+		if ($("#displayOrder").val() === "") {
+			$("#displayOrder").addClass("is-invalid");
+			isValid = false;
+		}
 
-        if (!isValid) return;
+		if (!isValid) return;
 
-        // Prepare FormData
-        var formData = new FormData(this);
+		// Prepare FormData
+		var formData = new FormData(this);
 
-        $.ajax({
-            url: site_url + 'admin/category/create', 
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            beforeSend: function () {
-                $('.btn-success').prop('disabled', true).text('Submitting...');
-            },
-            success: function (response) {
-                $('.btn-success').prop('disabled', false).text('Submit');
+		$.ajax({
+			url: site_url + "admin/category/create",
+			type: "POST",
+			data: formData,
+			dataType: "json",
+			contentType: false,
+			processData: false,
+			beforeSend: function () {
+				$(".btn-success").prop("disabled", true).text("Submitting...");
+			},
+			success: function (response) {
+				$(".btn-success").prop("disabled", false).text("Submit");
 
-                if (response.status) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Success',
-                        text: response.message,
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.href = site_url + 'slider';
-                    });
-                } else {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: response.message
-                    });
-                }
-            },
-            error: function () {
-                $('.btn-success').prop('disabled', false).text('Submit');
-                Swal.fire('Error', 'Something went wrong while submitting the form.', 'error');
-            }
-        });
-    });
-    });
+				if (response.status) {
+					Swal.fire({
+						icon: "success",
+						title: "Success",
+						text: response.message,
+						timer: 2000,
+						showConfirmButton: false,
+					}).then(() => {
+						window.location.href = site_url + "slider";
+					});
+				} else {
+					Swal.fire({
+						icon: "error",
+						title: "Error",
+						text: response.message,
+					});
+				}
+			},
+			error: function () {
+				$(".btn-success").prop("disabled", false).text("Submit");
+				Swal.fire(
+					"Error",
+					"Something went wrong while submitting the form.",
+					"error"
+				);
+			},
+		});
+	});
+});
 let currentPage = 1;
-let searchKeyword = '';
+let searchKeyword = "";
 
-function fetchSliders(page = 1, keyword = '') {
-    $.ajax({
-        url: site_url + "admin/category/ajax_list_slider",
-        type: "POST",
-        data: {
-            page: page,
-            keyword: keyword
-        },
-        dataType: "json",
-        success: function (res) {
-            if (res.status) {
-                $('#sliderTableBody').html(res.html);
-                $('.pagination').html(res.pagination);
-                currentPage = page;
-            } else {
-                $('#sliderTableBody').html('<tr><td colspan="7" class="text-center">No records found</td></tr>');
-                $('.pagination').html('');
-            }
-        }
-    });
+function fetchSliders(page = 1, keyword = "") {
+	$.ajax({
+		url: site_url + "admin/category/ajax_list_slider",
+		type: "POST",
+		data: {
+			page: page,
+			keyword: keyword,
+		},
+		dataType: "json",
+		success: function (res) {
+			if (res.status) {
+				$("#sliderTableBody").html(res.html);
+				$(".pagination").html(res.pagination);
+				currentPage = page;
+			} else {
+				$("#sliderTableBody").html(
+					'<tr><td colspan="7" class="text-center">No records found</td></tr>'
+				);
+				$(".pagination").html("");
+			}
+		},
+	});
 }
 
 // Pagination click
-$(document).on('click', '.page-link', function () {
-    let page = $(this).data('page');
-    if (page) {
-        fetchSliders(page, searchKeyword);
-    }
+$(document).on("click", ".page-link", function () {
+	let page = $(this).data("page");
+	if (page) {
+		fetchSliders(page, searchKeyword);
+	}
 });
 
 // Search input
-$('input[type="text"]').on('keyup', function () {
-    searchKeyword = $(this).val();
-    fetchSliders(1, searchKeyword); // reset to first page on search
+$('input[type="text"]').on("keyup", function () {
+	searchKeyword = $(this).val();
+	fetchSliders(1, searchKeyword); // reset to first page on search
 });
 
 // Initial load
@@ -632,12 +673,308 @@ $(document).on("click", ".toggle-status-btn_slider", function () {
 		},
 	});
 });
-document.getElementById('slider_image').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        document.getElementById('previewImage').src = event.target.result;
-    };
-    if (e.target.files[0]) {
-        reader.readAsDataURL(e.target.files[0]);
-    }
+const geonamesUsername = "rvmawar"; // Replace with your actual GeoNames username
+
+const stateCodeMap = {}; // We'll store state name => adminCode1 mapping
+
+$(document).ready(function () {
+	// Load all Indian states with their codes
+	$.ajax({
+		url: "https://secure.geonames.org/childrenJSON",
+		method: "GET",
+		data: {
+			geonameId: 1269750, // India
+			username: geonamesUsername,
+		},
+		success: function (response) {
+			response.geonames.forEach(function (state) {
+				const name = state.name;
+				const code = state.adminCode1;
+
+				stateCodeMap[name] = code;
+
+				$("#state").append(`<option value="${name}">${name}</option>`);
+			});
+		},
+		error: function () {
+			alert("Error fetching states.");
+		},
+	});
+
+	// On state change, fetch cities strictly by adminCode1
+	$("#state").on("change", function () {
+		// alert('h');
+		const selectedState = $(this).val();
+		const adminCode1 = stateCodeMap[selectedState];
+
+		if (adminCode1) {
+			$.ajax({
+				url: "https://secure.geonames.org/searchJSON",
+				method: "GET",
+				data: {
+					country: "IN",
+					adminCode1: adminCode1,
+					featureClass: "P",
+					maxRows: 1000,
+					username: geonamesUsername,
+				},
+				success: function (response) {
+					$("#city").empty().append('<option value="">Select City</option>');
+					response.geonames.forEach(function (city) {
+						$("#city").append(
+							`<option value="${city.name}">${city.name}</option>`
+						);
+					});
+				},
+				error: function () {
+					alert("Error fetching cities.");
+				},
+			});
+		} else {
+			$("#city").empty().append('<option value="">Select City</option>');
+		}
+	});
 });
+$("#CityForm").on("submit", function (e) {
+	e.preventDefault();
+
+	const state = $("#state").val();
+	const city = $("#city").val();
+
+	if (state === "" || city === "") {
+		Swal.fire("Required", "Please select both state and city", "warning");
+		return;
+	}
+
+	$.ajax({
+		url: site_url + "admin/category/save_city", // define `base_url` globally in your layout
+		method: "POST",
+		data: { state: state, city: city },
+		success: function (response) {
+			Swal.fire("Success", "City saved successfully", "success");
+			$("#CityForm")[0].reset();
+			$("#city").empty().append('<option value="">Select City</option>');
+		},
+		error: function () {
+			Swal.fire("Error", "Something went wrong while saving.", "error");
+		},
+	});
+});
+$(document).ready(function () {
+	let currentPage = 1;
+	let searchKeyword = "";
+
+	// Initial fetch
+	fetchCityList();
+
+	// Search handler
+	$('input[type="text"]').on("keyup", function () {
+		searchKeyword = $(this).val();
+		currentPage = 1;
+		fetchCityList();
+	});
+
+	// Pagination click
+	$(document).on("click", ".page-link", function () {
+		const page = $(this).data("page");
+		if (page) {
+			currentPage = page;
+			fetchCityList();
+		}
+	});
+
+	function fetchCityList() {
+		$.ajax({
+			url: site_url + "admin/category/ajax_list_city",
+			method: "POST",
+			dataType: "json",
+			data: {
+				search: searchKeyword,
+				page: currentPage,
+			},
+			success: function (res) {
+				let rows = "";
+				let i = res.start + 1;
+
+				if (res.data.length > 0) {
+					res.data.forEach(function (row) {
+						let status =
+							row.isActive == 1
+								? '<span class="badge bg-success">Publish</span>'
+								: '<span class="badge bg-danger">Unpublish</span>';
+
+						rows += `
+							<tr>
+								<td>${i++}</td>
+								<td>${row.state}</td>
+								<td>${row.city}</td>
+								<td>
+								${
+									row.isActive == 1
+										? `<div class="d-flex align-items-center text-success">
+													<i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+													<span>Published</span>
+												</div>`
+										: `<div class="d-flex align-items-center text-danger">
+													<i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+													<span>Unpublished</span>
+												</div>`
+								}
+							</td>
+							<td>
+								<div class="d-flex order-actions align-items-center">
+									<a href="${site_url}edit_city/${
+				row.id
+			}" class="me-2"><i class="bx bxs-edit"></i></a>
+
+									${
+										row.isActive == 1
+											? `<button class="btn btn-sm btn-danger toggle-status-btn_city" data-id="${row.id}" data-status="0">
+														<i class="bx bx-x-circle me-1"></i> Unpublish
+													</button>`
+											: `<button class="btn btn-sm btn-success toggle-status-btn_city" data-id="${row.id}" data-status="1">
+														<i class="bx bx-check-circle me-1"></i> Publish
+													</button>`
+									}
+								</div>
+							</td>
+							</tr>
+						`;
+					});
+				} else {
+					rows = `<tr><td colspan="5" class="text-center">No data found</td></tr>`;
+				}
+
+				$("#cityTableBody").html(rows);
+				renderPagination(res.total_pages, res.current_page);
+			},
+			error: function () {
+				alert("Failed to fetch data.");
+			},
+		});
+	}
+
+	function renderPagination(totalPages, currentPage) {
+		let pag = "";
+		if (totalPages > 1) {
+			if (currentPage > 1) {
+				pag += `<li class="page-item"><a class="page-link" href="javascript:;" data-page="${
+					currentPage - 1
+				}">Previous</a></li>`;
+			}
+
+			for (let i = 1; i <= totalPages; i++) {
+				let active = i == currentPage ? "active" : "";
+				pag += `<li class="page-item ${active}"><a class="page-link" href="javascript:;" data-page="${i}">${i}</a></li>`;
+			}
+
+			if (currentPage < totalPages) {
+				pag += `<li class="page-item"><a class="page-link" href="javascript:;" data-page="${
+					currentPage + 1
+				}">Next</a></li>`;
+			}
+		}
+		$(".pagination").html(pag);
+	}
+});
+$(document).ready(function () {
+    const geoUsername = 'rvmawar'; // Replace with your GeoNames username
+
+    // Fetch states on page load
+    $.ajax({
+        url: 'http://api.geonames.org/childrenJSON?geonameId=1269750&username=' + geoUsername,
+        method: 'GET',
+        success: function (response) {
+            $('#edit_state').append('<option value="">Select State</option>');
+            response.geonames.forEach(function (state) {
+                $('#edit_state').append(`<option value="${state.name}">${state.name}</option>`);
+            });
+        }
+    });
+
+    // When state changes, fetch cities
+    $('#edit_state').on('change', function () {
+        const stateName = $(this).val();
+        if (!stateName) return;
+
+        $('#edit_city').empty().append('<option value="">Loading...</option>');
+
+        $.ajax({
+            url: 'http://api.geonames.org/searchJSON?formatted=true&q=' + stateName + '&adminCode1=&maxRows=1000&country=IN&featureClass=P&username=' + geoUsername,
+            method: 'GET',
+            success: function (response) {
+                $('#edit_city').empty().append('<option value="">Select City</option>');
+                const cities = [...new Set(response.geonames.map(city => city.name))];
+                cities.forEach(function (city) {
+                    $('#edit_city').append(`<option value="${city}">${city}</option>`);
+                });
+            }
+        });
+    });
+
+    // Check if state is selected when city dropdown is clicked
+    $('#edit_city').on('focus', function () {
+        if ($('#edit_state').val() === '') {
+            Swal.fire('Please select a state first');
+            $(this).blur();
+        }
+    });
+    });
+
+
+$(document).ready(function () {
+    $('#EditCityForm').on('submit', function (e) {
+        e.preventDefault();
+
+        let city_id = $('input[name="city_id"]').val().trim();
+        let state = $('#state').val().trim();
+        let city = $('#city').val().trim();
+
+        if (state === "" || city === "") {
+            Swal.fire("Error", "Both state and city are required.", "error");
+            return;
+        }
+
+        $.ajax({
+            url: site_url + "admin/category/update_city",
+            type: "POST",
+            data: {
+                city_id: city_id,
+                state: state,
+                city: city
+            },
+            dataType: "json",
+            success: function (res) {
+                if (res.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "Updated",
+                        text: "City and State updated successfully.",
+                        showConfirmButton: false,
+                        timer: 1500
+                    }).then(() => {
+                        window.location.href = site_url + "city";
+                    });
+                } else {
+                    Swal.fire("Failed", res.message || "Something went wrong!", "error");
+                }
+            },
+            error: function () {
+                Swal.fire("Error", "AJAX call failed!", "error");
+            }
+        });
+    });
+});
+
+
+document
+	.getElementById("slider_image")
+	.addEventListener("change", function (e) {
+		const reader = new FileReader();
+		reader.onload = function (event) {
+			document.getElementById("previewImage").src = event.target.result;
+		};
+		if (e.target.files[0]) {
+			reader.readAsDataURL(e.target.files[0]);
+		}
+	});

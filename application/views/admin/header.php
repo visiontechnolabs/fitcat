@@ -135,9 +135,9 @@
 						<div class="menu-title">City</div>
 					</a>
 					<ul>
-						<li> <a href="<?= base_url('customer');?>"><i class='bx bx-radio-circle'></i>All City</a>
+						<li> <a href="<?= base_url('city');?>"><i class='bx bx-radio-circle'></i>All City</a>
 						</li>
-						<li> <a href="<?= base_url('add_customer');?>"><i class='bx bx-radio-circle'></i>Add City</a>
+						<li> <a href="<?= base_url('add_city');?>"><i class='bx bx-radio-circle'></i>Add City</a>
 						</li>
 						
 					</ul>
