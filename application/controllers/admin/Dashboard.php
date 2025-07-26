@@ -1,10 +1,11 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+require_once(APPPATH . 'core/Admin_Controller.php');
 
 
 
-class Dashboard extends MY_Controller
+class Dashboard extends Admin_Controller
 {
 
 

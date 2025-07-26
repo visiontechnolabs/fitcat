@@ -1,10 +1,11 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
+require_once(APPPATH . 'core/User_Controller.php');
 
 
 
-class Home extends MY_Controller
+class Home extends User_Controller
 {
 
 
@@ -16,19 +17,6 @@ class Home extends MY_Controller
 
         parent::__construct();
 
-
-
-        $this->load->library('form_validation');
-
-        $this->load->library('session');
-
-        $this->load->model('general_model');
-        $this->load->helper(['url', 'form']);
-
-        // if (!$this->session->userdata('user')) {
-
-        //     redirect('admin');
-        // }
 
 
     }

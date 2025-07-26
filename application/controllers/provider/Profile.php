@@ -47,7 +47,6 @@ class Profile extends Provider_Controller
     // Upload profile image if exists
     if (!empty($_FILES['profile_image']['name'])) {
         $config['upload_path']   = './uploads/profile/';
-        
         $config['allowed_types'] = 'jpg|jpeg|png';
         $config['max_size']      = 2048; // in KB
         $config['file_name']     = 'profile_' . time();

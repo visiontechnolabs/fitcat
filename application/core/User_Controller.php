@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Provider_Controller extends CI_Controller
+class User_Controller extends CI_Controller
 {
     public $provider;
 
@@ -13,11 +13,11 @@ class Provider_Controller extends CI_Controller
         $this->load->helper(['url', 'form']);
         $this->load->model('general_model');
 
-        $this->provider = $this->session->userdata('provider');
+        // $this->user = $this->session->userdata('user');
 
-        if (!$this->provider) {
-            redirect('provider/login');
-        }
+        // if (!$this->user || !$this->user['is_logged_in']) {
+        //     redirect('login');
+        // }
     }
 }
 
