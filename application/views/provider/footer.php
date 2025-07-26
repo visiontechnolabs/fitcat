@@ -145,8 +145,10 @@
 
 <script src="<?= base_url('assets/plugins/perfect-scrollbar/js/perfect-scrollbar.js') ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.13/js/intlTelInput.min.js"></script>
-
-<script src="<?= base_url('assets/js/custome.js') ?>?v=<?= time() ?>"></script>
+<script>
+const site_url = "<?= base_url(); ?>";
+</script>
+<script src="<?= base_url('assets/js/custom.js') ?>?v=<?= time() ?>"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -156,6 +158,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js" integrity="sha512-b+nQTCdtTBIRIbraqNEwsjB6UvL3UEMkXnhzd8awtCYh0Kcsjl9uEgwVFVbhoj3uu1DO1ZMacNvLoyJJiNfcvg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
+<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
 
 
 <!--app JS-->
@@ -165,16 +168,12 @@
 <script src="<?= base_url('assets/js/index.js') ?>"></script>
 
 <script src="<?= base_url('assets/plugins/peity/jquery.peity.min.js') ?>"></script>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-messaging-compat.js"></script>
-<script src="<?= base_url('assets/js/firebase-messaging.js') ?>"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/eruda"></script> -->
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 		<script src="https://www.gstatic.com/charts/loader.js"></script>
 <!-- <script>eruda.init();</script></script> -->
 <script>
-  const site_url = "<?= base_url(); ?>";
+  
 
 
   $(".data-attributes span").peity("donut")

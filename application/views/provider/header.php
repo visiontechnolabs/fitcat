@@ -1,44 +1,48 @@
 <!doctype html>
 <html lang="en" data-bs-theme="light">
+
 <head>
 	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!--favicon-->
-<link rel="icon" href="<?= base_url('assets/images/favicon-32x32.png') ?>" type="image/png">
+	<link rel="icon" href="<?= base_url('assets/images/dumbbell_8729453.png') ?>" type="image/png">
 
-<!--plugins-->
-<link href="<?= base_url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') ?>" rel="stylesheet">
-<link href="<?= base_url('assets/plugins/simplebar/css/simplebar.css') ?>" rel="stylesheet">
-<link href="<?= base_url('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') ?>" rel="stylesheet">
-<link href="<?= base_url('assets/plugins/metismenu/css/metisMenu.min.css') ?>" rel="stylesheet">
+	<!--plugins-->
+	<link href="<?= base_url('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/plugins/simplebar/css/simplebar.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/plugins/metismenu/css/metisMenu.min.css') ?>" rel="stylesheet">
 
-<!-- loader-->
-<link href="<?= base_url('assets/css/pace.min.css') ?>" rel="stylesheet"/>
-<script src="<?= base_url('assets/js/pace.min.js') ?>"></script>
+	<!-- loader-->
+	<link href="<?= base_url('assets/css/pace.min.css') ?>" rel="stylesheet" />
+	<script src="<?= base_url('assets/js/pace.min.js') ?>"></script>
 
-<!-- Bootstrap CSS -->
-<link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
-<link href="<?= base_url('assets/css/bootstrap-extended.css') ?>" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+	<!-- Bootstrap CSS -->
+	<link href="<?= base_url('assets/css/bootstrap.min.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/css/bootstrap-extended.css') ?>" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css"
+		rel="stylesheet" />
+
+<!-- Tagify CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+
+	<!-- Google Fonts (CDN) -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+	<!-- App Styles -->
+	<link href="<?= base_url('assets/sass/app.css') ?>" rel="stylesheet">
+	<link href="<?= base_url('assets/css/icons.css') ?>" rel="stylesheet">
+	<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+
+	<!-- Theme Style CSS -->
+	<link rel="stylesheet" href="<?= base_url('assets/sass/dark-theme.css') ?>">
+	<link rel="stylesheet" href="<?= base_url('assets/sass/semi-dark.css') ?>">
+	<link rel="stylesheet" href="<?= base_url('assets/sass/bordered-theme.css') ?>">
 
 
-<!-- Google Fonts (CDN) -->
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-
-<!-- App Styles -->
-<link href="<?= base_url('assets/sass/app.css') ?>" rel="stylesheet">
-<link href="<?= base_url('assets/css/icons.css') ?>" rel="stylesheet">
-<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-
-<!-- Theme Style CSS -->
-<link rel="stylesheet" href="<?= base_url('assets/sass/dark-theme.css') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/sass/semi-dark.css') ?>">
-<link rel="stylesheet" href="<?= base_url('assets/sass/bordered-theme.css') ?>">
-
-	
-	<title>Venus-automobile Dashboard</title>
+<title><?= isset($this->provider['gym_name']) ? $this->provider['gym_name'] : 'Dashboard'; ?></title>
 	<script>
 		(function () {
 			var savedTheme = localStorage.getItem('theme') || 'light';
@@ -54,53 +58,88 @@
 		<div class="sidebar-wrapper" data-simplebar="true">
 			<div class="sidebar-header">
 				<div>
-					<img src="<?= base_url('assets/images/logo-img.png');?>" class="logo-icon img-fluid" alt="logo icon" style="width:100%;">
+					<img src="<?= base_url('assets/images/logo_ficat.png'); ?>" class="logo-icon img-fluid ms-4 mt-2"
+						alt="logo icon" style="width:100%;">
 				</div>
 				<div>
 					<h4 class="logo-text"></h4>
 				</div>
 				<div class="mobile-toggle-icon ms-auto"><i class='bx bx-x'></i>
 				</div>
-			 </div>
+			</div>
 			<!--navigation-->
 			<ul class="metismenu" id="menu">
 				<li>
-					<a href="<?= base_url('provider/dashboard');?>" class="">
+					<a href="<?= base_url('provider/dashboard'); ?>" class="">
 						<div class="parent-icon"><i class='bx bx-home-alt'></i>
 						</div>
 						<div class="menu-title">Dashboard</div>
 					</a>
-					
+
 				</li>
-              <li>
+				<li>
+					<a href="<?= base_url('wallet'); ?>" class="">
+						<div class="parent-icon"><i class="bx bx-wallet"></i></div>
+						<div class="menu-title">Wallet</div>
+					</a>
+				</li>
+
+				<li>
 					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon"><i class="bx bx-message-square-edit"></i>
-						</div>
-						<div class="menu-title">Enquires</div>
+						<div class="parent-icon"><i class="bx bx-cog"></i></div>
+						<div class="menu-title">Service</div>
 					</a>
 					<ul>
-						<li> <a href="<?= base_url('enquries');?>"><i class='bx bx-radio-circle'></i>All Enquries</a>
-						</li>
-						<li> <a href="<?= base_url('add_enquries');?>"><i class='bx bx-radio-circle'></i>Add new</a>
-						</li>
-						
+						<li> <a href="<?= base_url('service'); ?>"><i class='bx bx-list-ul'></i>All Services</a></li>
+						<li> <a href="<?= base_url('add_service'); ?>"><i class='bx bx-plus'></i>Add Service</a></li>
 					</ul>
-			 </li>
-              <li>
+				</li>
+
+				<li>
 					<a href="javascript:;" class="has-arrow">
-						<div class="parent-icon"><i class="bx bx-user-circle"></i>
-						</div>
+						<div class="parent-icon"><i class="bx bx-user"></i></div>
 						<div class="menu-title">Customers</div>
 					</a>
 					<ul>
-						<li> <a href="<?= base_url('customer');?>"><i class='bx bx-radio-circle'></i>All Customer</a>
+						<li> <a href="<?= base_url('customer'); ?>"><i class='bx bx-group'></i>All Customer</a></li>
+						<li> <a href="<?= base_url('add_customer'); ?>"><i class='bx bx-user-plus'></i>Add Customer</a>
 						</li>
-						<li> <a href="<?= base_url('add_customer');?>"><i class='bx bx-radio-circle'></i>Add Customer</a>
-						</li>
-						
 					</ul>
-			 </li>
-			 </ul>
+				</li>
+
+				<li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-book-bookmark"></i></div>
+						<div class="menu-title">Bookings</div>
+					</a>
+					<ul>
+						<li> <a href="<?= base_url('booking'); ?>"><i class='bx bx-calendar'></i>All Bookings</a></li>
+						<li> <a href="<?= base_url('add_bookings'); ?>"><i class='bx bx-calendar-plus'></i>Add
+								Booking</a></li>
+					</ul>
+				</li>
+
+				<!-- <li>
+					<a href="javascript:;" class="has-arrow">
+						<div class="parent-icon"><i class="bx bx-dumbbell"></i></div>
+						<div class="menu-title">Trainers</div>
+					</a>
+					<ul>
+						<li> <a href="<?= base_url('trainer'); ?>"><i class='bx bx-id-card'></i>All Trainer</a></li>
+						<li> <a href="<?= base_url('add_trainer'); ?>"><i class='bx bx-user-plus'></i>Add Trainer</a>
+						</li>
+					</ul>
+				</li> -->
+
+				<li>
+					<a href="<?= base_url('scheduled'); ?>" class="">
+						<div class="parent-icon"><i class="bx bx-time-five"></i></div>
+						<div class="menu-title">Schedule</div>
+					</a>
+				</li>
+
+
+			</ul>
 			<!--end navigation-->
 		</div>
 		<!--end sidebar wrapper -->
@@ -139,35 +178,51 @@
 
 								<ul class="dropdown-menu dropdown-menu-end">
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/01.png" width="20" alt=""><span class="ms-2">English</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/01.png" width="20" alt=""><span
+												class="ms-2">English</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/02.png" width="20" alt=""><span class="ms-2">Catalan</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/02.png" width="20" alt=""><span
+												class="ms-2">Catalan</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/03.png" width="20" alt=""><span class="ms-2">French</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/03.png" width="20" alt=""><span
+												class="ms-2">French</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/04.png" width="20" alt=""><span class="ms-2">Belize</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/04.png" width="20" alt=""><span
+												class="ms-2">Belize</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/05.png" width="20" alt=""><span class="ms-2">Colombia</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/05.png" width="20" alt=""><span
+												class="ms-2">Colombia</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/06.png" width="20" alt=""><span class="ms-2">Spanish</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/06.png" width="20" alt=""><span
+												class="ms-2">Spanish</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/07.png" width="20" alt=""><span class="ms-2">Georgian</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/07.png" width="20" alt=""><span
+												class="ms-2">Georgian</span></a>
 
 									</li>
 
-									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img src="assets/images/county/08.png" width="20" alt=""><span class="ms-2">Hindi</span></a>
+									<li><a class="dropdown-item d-flex align-items-center py-2" href="javascript:;"><img
+												src="assets/images/county/08.png" width="20" alt=""><span
+												class="ms-2">Hindi</span></a>
 
 									</li>
 
@@ -250,7 +305,8 @@
 
 														<div class="app-icon">
 
-															<img src="assets/images/app/google-drive.png" width="30" alt="">
+															<img src="assets/images/app/google-drive.png" width="30"
+																alt="">
 
 														</div>
 
@@ -322,7 +378,8 @@
 
 														<div class="app-icon">
 
-															<img src="assets/images/app/stack-overflow.png" width="30" alt="">
+															<img src="assets/images/app/stack-overflow.png" width="30"
+																alt="">
 
 														</div>
 
@@ -394,7 +451,8 @@
 
 														<div class="app-icon">
 
-															<img src="assets/images/app/google-calendar.png" width="30" alt="">
+															<img src="assets/images/app/google-calendar.png" width="30"
+																alt="">
 
 														</div>
 
@@ -442,7 +500,8 @@
 
 														<div class="app-icon">
 
-															<img src="assets/images/app/google-photos.png" width="30" alt="">
+															<img src="assets/images/app/google-photos.png" width="30"
+																alt="">
 
 														</div>
 
@@ -466,7 +525,8 @@
 
 														<div class="app-icon">
 
-															<img src="assets/images/app/pinterest.png" width="30" alt="">
+															<img src="assets/images/app/pinterest.png" width="30"
+																alt="">
 
 														</div>
 
@@ -632,7 +692,13 @@
 
 
 
-									<div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+										<div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+											<div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+										</div>
+										<div class="ps__rail-y" style="top: 0px; right: 0px;">
+											<div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+										</div>
+									</div>
 
 								</div>
 
@@ -666,13 +732,16 @@
 
 												<div class="user-online">
 
-													<img src="https://mydemo.visiontechnolabs.com/assets/images/avatars/avatar-2.png" alt="Admin" class="rounded-circle p-1 bg-primary" width="110" id="avatar-image" style="cursor:pointer;">
+													<img src="https://mydemo.visiontechnolabs.com/assets/images/avatars/avatar-2.png"
+														alt="Admin" class="rounded-circle p-1 bg-primary" width="110"
+														id="avatar-image" style="cursor:pointer;">
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">Daisy Anderson<span class="msg-time float-end">5 sec
+													<h6 class="msg-name">Daisy Anderson<span
+															class="msg-time float-end">5 sec
 
 															ago</span></h6>
 
@@ -713,13 +782,15 @@
 
 												<div class="user-online">
 
-													<img src="assets/images/avatars/avatar-2.png" class="msg-avatar" alt="user avatar">
+													<img src="assets/images/avatars/avatar-2.png" class="msg-avatar"
+														alt="user avatar">
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">Althea Cabardo <span class="msg-time float-end">14
+													<h6 class="msg-name">Althea Cabardo <span
+															class="msg-time float-end">14
 
 															sec ago</span></h6>
 
@@ -737,13 +808,15 @@
 
 												<div class="notify bg-light-success text-success">
 
-													<img src="assets/images/app/outlook.png" width="25" alt="user avatar">
+													<img src="assets/images/app/outlook.png" width="25"
+														alt="user avatar">
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">Account Created<span class="msg-time float-end">28 min
+													<h6 class="msg-name">Account Created<span
+															class="msg-time float-end">28 min
 
 															ago</span></h6>
 
@@ -765,7 +838,8 @@
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">New Product Approved <span class="msg-time float-end">2 hrs ago</span></h6>
+													<h6 class="msg-name">New Product Approved <span
+															class="msg-time float-end">2 hrs ago</span></h6>
 
 													<p class="msg-info">Your new product has approved</p>
 
@@ -781,13 +855,15 @@
 
 												<div class="user-online">
 
-													<img src="assets/images/avatars/avatar-4.png" class="msg-avatar" alt="user avatar">
+													<img src="assets/images/avatars/avatar-4.png" class="msg-avatar"
+														alt="user avatar">
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">Katherine Pechon <span class="msg-time float-end">15
+													<h6 class="msg-name">Katherine Pechon <span
+															class="msg-time float-end">15
 
 															min ago</span></h6>
 
@@ -803,13 +879,15 @@
 
 											<div class="d-flex align-items-center">
 
-												<div class="notify bg-light-success text-success"><i class="bx bx-check-square"></i>
+												<div class="notify bg-light-success text-success"><i
+														class="bx bx-check-square"></i>
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">Your item is shipped <span class="msg-time float-end">5 hrs
+													<h6 class="msg-name">Your item is shipped <span
+															class="msg-time float-end">5 hrs
 
 															ago</span></h6>
 
@@ -827,13 +905,15 @@
 
 												<div class="notify bg-light-primary">
 
-													<img src="assets/images/app/github.png" width="25" alt="user avatar">
+													<img src="assets/images/app/github.png" width="25"
+														alt="user avatar">
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">New 24 authors<span class="msg-time float-end">1 day
+													<h6 class="msg-name">New 24 authors<span
+															class="msg-time float-end">1 day
 
 															ago</span></h6>
 
@@ -851,13 +931,15 @@
 
 												<div class="user-online">
 
-													<img src="assets/images/avatars/avatar-8.png" class="msg-avatar" alt="user avatar">
+													<img src="assets/images/avatars/avatar-8.png" class="msg-avatar"
+														alt="user avatar">
 
 												</div>
 
 												<div class="flex-grow-1">
 
-													<h6 class="msg-name">Peter Costanzo <span class="msg-time float-end">6 hrs
+													<h6 class="msg-name">Peter Costanzo <span
+															class="msg-time float-end">6 hrs
 
 															ago</span></h6>
 
@@ -869,7 +951,13 @@
 
 										</a>
 
-									<div class="ps__rail-x" style="left: 0px; bottom: 0px;"><div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps__rail-y" style="top: 0px; right: 0px;"><div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div></div></div>
+										<div class="ps__rail-x" style="left: 0px; bottom: 0px;">
+											<div class="ps__thumb-x" tabindex="0" style="left: 0px; width: 0px;"></div>
+										</div>
+										<div class="ps__rail-y" style="top: 0px; right: 0px;">
+											<div class="ps__thumb-y" tabindex="0" style="top: 0px; height: 0px;"></div>
+										</div>
+									</div>
 
 									<a href="javascript:;">
 
@@ -909,9 +997,9 @@
 
 									<div class="header-message-list ps">
 
-										
 
-								</div>
+
+									</div>
 
 							</li>
 
@@ -920,44 +1008,33 @@
 					</div>
 
 					<div class="user-box dropdown px-3">
-
-						<a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-
-							
-							<!-- <img src="" class="user-img" alt="user avatar"> -->
-
+						<a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
+							href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
+							<?php
+							$provider = $this->session->userdata('provider');
+							$gym_name = isset($provider['gym_name']) ? $provider['gym_name'] : 'Unknown Gym';
+							$user_name = isset($provider['name']) ? $provider['name'] : 'User';
+							?>
 							<div class="user-info">
-
-
-								<p class="user-name mb-0">
-									FITCAT							</p>
-								<p class="designattion mb-0">
-																	</p>
-
-
+								<p class="user-name mb-0"><?= $gym_name ?></p>
+								<p class="designattion mb-0"><?= $user_name ?></p>
 							</div>
-
 						</a>
-
 						<ul class="dropdown-menu dropdown-menu-end">
-
-							
-
-							<!-- <li><button onclick="initFirebaseMessagingRegistration()">Enable Notifications</button> -->
-
-
-							
-
+							<li><a class="dropdown-item d-flex align-items-center" href="<?= base_url('provider/profile');?>"><i
+										class="bx bx-user fs-5"></i><span>Profile</span></a></li>
+							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+										class="bx bx-file fs-5"></i><span>Documents</span></a></li>
+							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+										class="bx bxs-bank fs-5"></i><span>Bank Details</span></a></li>
+							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+										class="bx bx-lock-alt fs-5"></i><span>Change Password</span></a></li>
 							<li>
-
 								<div class="dropdown-divider mb-0"></div>
-
 							</li>
-
-							<li><a class="dropdown-item d-flex align-items-center" href="<?=base_url('logout');?>"><i class="bx bx-log-out-circle"></i><span>Logout</span></a>
-
-							</li>
-
+							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+										class="bx bx-log-out fs-5"></i><span>Logout</span></a></li>
 						</ul>
 
 					</div>

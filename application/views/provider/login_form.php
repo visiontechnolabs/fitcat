@@ -84,7 +84,7 @@
                                         <p class="mb-0">Please log in to your account</p>
                                     </div>
                                     <div class="form-body">
-                                        <form class="row g-3 login-form" action="<?= base_url('login/send_otp') ?>"
+                                        <form class="row g-3 login-form" action="<?= base_url('provider/login/send_otp') ?>"
                                             method="post">
                                             <div class="col-12">
                                                 <label for="inputMobile" class="form-label">Mobile</label>
@@ -97,6 +97,12 @@
                                                     <button type="submit" class="btn btn-primary">Send OTP</button>
                                                 </div>
                                             </div>
+                                            <div class="col-12">
+												<div class="text-center">
+													<p class="mb-0">Don't have an account yet? <a href="<?= base_url('provider/sing_up');?>">Sign up here</a>
+													</p>
+												</div>
+											</div>
                                         </form>
                                     </div>
                                     <!-- <div class="login-separater text-center mb-5"> <span>OR SIGN IN WITH</span>

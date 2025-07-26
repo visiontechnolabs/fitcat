@@ -50,9 +50,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |		my-controller/my-method	-> my_controller/my_method
 */
 $route['default_controller'] = 'home';
-$route['provider'] = 'login';
+
+
 $route['admin'] = 'admin/login';
-$route['dashboard_admin'] = 'admin/dashboard';
+// $route['dashboard_admin'] = 'admin/dashboard';
+
 
 // admin routes
 $route['category'] = 'admin/category';
@@ -66,6 +68,24 @@ $route['add_slider'] = 'admin/category/add_slider';
 $route['city'] = 'admin/category/city';
 $route['add_city'] = 'admin/category/add_city';
 $route['edit_city/(:num)'] = 'admin/category/edit_city/$1';
+
+//provider route
+$route['wallet'] = 'provider/wallet';
+$route['scheduled'] = 'provider/wallet/scheduled';
+$route['provider'] = 'provider/login';
+$route['provider/sing_up'] = 'provider/login/sing_up';
+$route['send_register_otp'] = 'provider/login/send_register_otp';
+$route['service'] = 'provider/service';
+$route['add_service'] = 'provider/service/add_service';
+$route['edit_service/(:num)'] = 'provider/service/edit_service/$1';
+
+
+
+
+
+
+
+
 
 
 

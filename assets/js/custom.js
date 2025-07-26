@@ -68,6 +68,56 @@ $(document).ready(function () {
 			},
 		});
 	});
+	$("#service_form").on("submit", function (e) {
+		e.preventDefault();
+
+		const form = this;
+		if (!form.checkValidity()) {
+			form.classList.add("was-validated");
+			return;
+		}
+
+		const formData = new FormData(this);
+
+		$.ajax({
+			url: site_url + "provider/service/save",
+			type: "POST",
+			data: formData,
+			contentType: false,
+			processData: false,
+			dataType: "json", // Make sure the server returns JSON
+			success: function (response) {
+				if (response.status === "success") {
+					Swal.fire({
+						icon: "success",
+						title: "Success",
+						text: response.message || "Service saved successfully!",
+						confirmButtonColor: "#3085d6",
+						confirmButtonText: "OK",
+					});
+
+					form.reset();
+					$("#image_preview").attr("src", defaultImage);
+					form.classList.remove("was-validated");
+				} else {
+					Swal.fire({
+						icon: "warning",
+						title: "Notice",
+						text: response.message || "Category already exists.",
+						confirmButtonColor: "#d33",
+						confirmButtonText: "OK",
+					});
+				}
+			},
+			error: function (xhr) {
+				Swal.fire({
+					icon: "error",
+					title: "Oops...",
+					text: "Something went wrong while saving the category.",
+				});
+			},
+		});
+	});
 });
 $(document).ready(function () {
 	$("#SubcategoryForm").on("submit", function (e) {
@@ -245,6 +295,36 @@ $(document).on("click", ".toggle-status-btn", function () {
 
 	$.ajax({
 		url: site_url + "admin/category/toggle_status",
+		type: "POST",
+		data: { id: postId, status: newStatus },
+		dataType: "json",
+		success: function (res) {
+			if (res.success) {
+				Swal.fire({
+					icon: "success",
+					title: res.message,
+					timer: 2000,
+					showConfirmButton: false,
+				});
+				setTimeout(function () {
+					location.reload();
+				}, 2000);
+			} else {
+				Swal.fire("Error", res.message, "error");
+			}
+		},
+		error: function () {
+			Swal.fire("Error", "Something went wrong!", "error");
+		},
+	});
+});
+$(document).on("click", ".toggle-status-btn_service", function () {
+	const button = $(this);
+	const postId = button.data("id");
+	const newStatus = button.data("status");
+
+	$.ajax({
+		url: site_url + "provider/service/toggle_status",
 		type: "POST",
 		data: { id: postId, status: newStatus },
 		dataType: "json",
@@ -522,6 +602,43 @@ $("#editCategoryForm").on("submit", function (e) {
 		},
 	});
 });
+$("#edit_service_form").on("submit", function (e) {
+	e.preventDefault();
+	// alert('hh');
+	// return;
+	var formData = new FormData(this);
+
+	$.ajax({
+		url: site_url + "provider/service/update",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+		dataType: "json",
+		success: function (response) {
+			if (response.status) {
+				Swal.fire({
+					icon: "success",
+					title: "Updated",
+					text: response.message,
+					timer: 2000,
+					showConfirmButton: false,
+				}).then(() => {
+					window.location.href = site_url + "service";
+				});
+			} else {
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: response.message,
+				});
+			}
+		},
+		error: function () {
+			Swal.fire("Error", "Something went wrong!", "error");
+		},
+	});
+});
 
 $(document).ready(function () {
 	$("#SliderForm").on("submit", function (e) {
@@ -697,7 +814,7 @@ $(document).ready(function () {
 			});
 		},
 		error: function () {
-			alert("Error fetching states.");
+			// alert("Error fetching states.");
 		},
 	});
 
@@ -824,8 +941,8 @@ $(document).ready(function () {
 							<td>
 								<div class="d-flex order-actions align-items-center">
 									<a href="${site_url}edit_city/${
-				row.id
-			}" class="me-2"><i class="bx bxs-edit"></i></a>
+							row.id
+						}" class="me-2"><i class="bx bxs-edit"></i></a>
 
 									${
 										row.isActive == 1
@@ -848,9 +965,9 @@ $(document).ready(function () {
 				$("#cityTableBody").html(rows);
 				renderPagination(res.total_pages, res.current_page);
 			},
-			error: function () {
-				alert("Failed to fetch data.");
-			},
+			// error: function () {
+			// 	alert("Failed to fetch data.");
+			// },
 		});
 	}
 
@@ -878,97 +995,356 @@ $(document).ready(function () {
 	}
 });
 $(document).ready(function () {
-    const geoUsername = 'rvmawar'; // Replace with your GeoNames username
+	const geoUsername = "rvmawar"; // Replace with your GeoNames username
 
-    // Fetch states on page load
-    $.ajax({
-        url: 'http://api.geonames.org/childrenJSON?geonameId=1269750&username=' + geoUsername,
-        method: 'GET',
-        success: function (response) {
-            $('#edit_state').append('<option value="">Select State</option>');
-            response.geonames.forEach(function (state) {
-                $('#edit_state').append(`<option value="${state.name}">${state.name}</option>`);
-            });
-        }
-    });
+	// Fetch states on page load
+	$.ajax({
+		url:
+			"http://api.geonames.org/childrenJSON?geonameId=1269750&username=" +
+			geoUsername,
+		method: "GET",
+		success: function (response) {
+			$("#edit_state").append('<option value="">Select State</option>');
+			response.geonames.forEach(function (state) {
+				$("#edit_state").append(
+					`<option value="${state.name}">${state.name}</option>`
+				);
+			});
+		},
+	});
 
-    // When state changes, fetch cities
-    $('#edit_state').on('change', function () {
-        const stateName = $(this).val();
-        if (!stateName) return;
+	// When state changes, fetch cities
+	$("#edit_state").on("change", function () {
+		const stateName = $(this).val();
+		if (!stateName) return;
 
-        $('#edit_city').empty().append('<option value="">Loading...</option>');
+		$("#edit_city").empty().append('<option value="">Loading...</option>');
 
-        $.ajax({
-            url: 'http://api.geonames.org/searchJSON?formatted=true&q=' + stateName + '&adminCode1=&maxRows=1000&country=IN&featureClass=P&username=' + geoUsername,
-            method: 'GET',
-            success: function (response) {
-                $('#edit_city').empty().append('<option value="">Select City</option>');
-                const cities = [...new Set(response.geonames.map(city => city.name))];
-                cities.forEach(function (city) {
-                    $('#edit_city').append(`<option value="${city}">${city}</option>`);
-                });
-            }
-        });
-    });
+		$.ajax({
+			url:
+				"http://api.geonames.org/searchJSON?formatted=true&q=" +
+				stateName +
+				"&adminCode1=&maxRows=1000&country=IN&featureClass=P&username=" +
+				geoUsername,
+			method: "GET",
+			success: function (response) {
+				$("#edit_city").empty().append('<option value="">Select City</option>');
+				const cities = [...new Set(response.geonames.map((city) => city.name))];
+				cities.forEach(function (city) {
+					$("#edit_city").append(`<option value="${city}">${city}</option>`);
+				});
+			},
+		});
+	});
 
-    // Check if state is selected when city dropdown is clicked
-    $('#edit_city').on('focus', function () {
-        if ($('#edit_state').val() === '') {
-            Swal.fire('Please select a state first');
-            $(this).blur();
-        }
-    });
-    });
-
-
+	// Check if state is selected when city dropdown is clicked
+	$("#edit_city").on("focus", function () {
+		if ($("#edit_state").val() === "") {
+			Swal.fire("Please select a state first");
+			$(this).blur();
+		}
+	});
+});
 $(document).ready(function () {
-    $('#EditCityForm').on('submit', function (e) {
+    $('#ProfileForm').on('submit', function (e) {
         e.preventDefault();
 
-        let city_id = $('input[name="city_id"]').val().trim();
-        let state = $('#state').val().trim();
-        let city = $('#city').val().trim();
+        let form = this;
+        let formData = new FormData(form);
 
-        if (state === "" || city === "") {
-            Swal.fire("Error", "Both state and city are required.", "error");
-            return;
-        }
+        // Clear previous validation errors
+        $('.is-invalid').removeClass('is-invalid');
+        $('.invalid-feedback').remove();
+
+        let isValid = true;
+
+        $(form).find('input, select, textarea').each(function () {
+            let $input = $(this);
+            let value = $input.val();
+
+            // Skip disabled or hidden fields
+            if ($input.is(':disabled') || $input.is(':hidden')) return;
+
+            // Handle multi-select
+            if ($input.is('select[multiple]')) {
+                if ($input.prop('required') && (!value || value.length === 0)) {
+                    $input.addClass('is-invalid');
+                    $input.after('<div class="invalid-feedback">This field is required.</div>');
+                    isValid = false;
+                }
+                return; // skip further checks for multi-select
+            }
+
+            // General required field validation
+            if ($input.prop('required') && (value === null || $.trim(value) === '')) {
+                $input.addClass('is-invalid');
+                $input.after('<div class="invalid-feedback">This field is required.</div>');
+                isValid = false;
+            }
+        });
+
+        if (!isValid) return;
+
+        // Optional: disable submit button during save
+        let $submitBtn = $(form).find('button[type="submit"]');
+        $submitBtn.prop('disabled', true).text('Saving...');
 
         $.ajax({
-            url: site_url + "admin/category/update_city",
-            type: "POST",
-            data: {
-                city_id: city_id,
-                state: state,
-                city: city
+            url: site_url + "provider/profile/save",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Profile Updated!',
+                    text: 'Your information has been successfully saved.',
+                    confirmButtonColor: '#28a745'
+                });
             },
-            dataType: "json",
-            success: function (res) {
-                if (res.status === "success") {
-                    Swal.fire({
-                        icon: "success",
-                        title: "Updated",
-                        text: "City and State updated successfully.",
-                        showConfirmButton: false,
-                        timer: 1500
-                    }).then(() => {
-                        window.location.href = site_url + "city";
-                    });
-                } else {
-                    Swal.fire("Failed", res.message || "Something went wrong!", "error");
-                }
+            error: function (xhr) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Something went wrong. Please try again!',
+                    confirmButtonColor: '#dc3545'
+                });
             },
-            error: function () {
-                Swal.fire("Error", "AJAX call failed!", "error");
+            complete: function () {
+                // Re-enable the submit button
+                $submitBtn.prop('disabled', false).text('Save');
             }
         });
     });
 });
 
 
+$(document).ready(function () {
+	$("#EditCityForm").on("submit", function (e) {
+		e.preventDefault();
+
+		let city_id = $('input[name="city_id"]').val().trim();
+		let state = $("#state").val().trim();
+		let city = $("#city").val().trim();
+
+		if (state === "" || city === "") {
+			Swal.fire("Error", "Both state and city are required.", "error");
+			return;
+		}
+
+		$.ajax({
+			url: site_url + "admin/category/update_city",
+			type: "POST",
+			data: {
+				city_id: city_id,
+				state: state,
+				city: city,
+			},
+			dataType: "json",
+			success: function (res) {
+				if (res.status === "success") {
+					Swal.fire({
+						icon: "success",
+						title: "Updated",
+						text: "City and State updated successfully.",
+						showConfirmButton: false,
+						timer: 1500,
+					}).then(() => {
+						window.location.href = site_url + "city";
+					});
+				} else {
+					Swal.fire("Failed", res.message || "Something went wrong!", "error");
+				}
+			},
+			error: function () {
+				Swal.fire("Error", "AJAX call failed!", "error");
+			},
+		});
+	});
+});
+function loadServices(page = 1, search = "") {
+	$.ajax({
+		url: site_url + "provider/service/fetch_services",
+		method: "POST",
+		data: { page, search },
+		dataType: "json",
+		success: function (res) {
+			if (res.status === "success") {
+				renderTable(res.data);
+				renderPagination(res.total, res.page, res.limit, search);
+			}
+		},
+	});
+}
+
+function renderTable(data) {
+	let html = "";
+	if (data.length === 0) {
+		html = '<tr><td colspan="6">No records found</td></tr>';
+	} else {
+		data.forEach((item, index) => {
+			html += `<tr>
+                <td>${index + 1}</td>
+                <td><img src="${site_url + item.image}" width="50"/></td>
+                <td>${item.name}</td>
+                <td>
+                  ${
+										item.isActive == 1
+											? `<div class="d-flex align-items-center text-success">
+                          <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+                          <span>Published</span>
+                        </div>`
+											: `<div class="d-flex align-items-center text-danger">
+                          <i class="bx bx-radio-circle-marked bx-burst bx-rotate-90 align-middle font-18 me-1"></i>
+                          <span>Unpublished</span>
+                        </div>`
+									}
+                </td>
+                <td>
+                  <div class="d-flex order-actions align-items-center">
+                    <a href="${site_url}edit_service/${
+				item.id
+			}" class="me-2" title="Edit">
+                      <i class="bx bxs-edit"></i>
+                    </a>
+                    ${
+											item.isActive == 1
+												? `<button class="btn btn-sm btn-danger toggle-status-btn_service" data-id="${item.id}" data-status="0">
+                             <i class="bx bx-x-circle me-1"></i> Unpublish
+                           </button>`
+												: `<button class="btn btn-sm btn-success toggle-status-btn_service" data-id="${item.id}" data-status="1">
+                             <i class="bx bx-check-circle me-1"></i> Publish
+                           </button>`
+										}
+                  </div>
+                </td>
+            </tr>`;
+		});
+	}
+	$("#serviceTableBody").html(html);
+}
+
+function renderPagination(total, currentPage, limit, search) {
+	const totalPages = Math.ceil(total / limit);
+	let start = Math.max(1, currentPage - 1);
+	let end = Math.min(start + 2, totalPages);
+
+	if (end - start < 2) start = Math.max(1, end - 2);
+
+	let html = "";
+
+	if (currentPage > 1) {
+		html += `<li class="page-item"><a class="page-link" href="javascript:;" onclick="loadServices(${
+			currentPage - 1
+		}, '${search}')">Previous</a></li>`;
+	}
+
+	for (let i = start; i <= end; i++) {
+		html += `<li class="page-item ${i === currentPage ? "active" : ""}">
+                    <a class="page-link" href="javascript:;" onclick="loadServices(${i}, '${search}')">${i}</a>
+                </li>`;
+	}
+
+	if (currentPage < totalPages) {
+		html += `<li class="page-item"><a class="page-link" href="javascript:;" onclick="loadServices(${
+			currentPage + 1
+		}, '${search}')">Next</a></li>`;
+	}
+
+	$(".pagination").html(html);
+}
+
+$(document).ready(function () {
+	loadServices();
+
+	$(".radius-30").on("input", function () {
+		const search = $(this).val();
+		loadServices(1, search);
+	});
+});
+$(document).ready(function () {
+    $('#categorySelect').on('change', function () {
+        let categoryId = $(this).val();
+
+        if (categoryId) {
+            $.ajax({
+                url: site_url + "provider/profile/get_subcategories",
+                type: 'POST',
+                data: { category_id: categoryId },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.length > 0) {
+                        let options = '<option value="">-- Select Subcategory --</option>';
+                        $.each(data, function (i, subcat) {
+                            options += `<option value="${subcat.id}">${subcat.title}</option>`;
+                        });
+                        $('#subcategorySelect').html(options);
+                        $('#subcategoryWrapper').show();
+                    } else {
+                        $('#subcategoryWrapper').hide();
+                        $('#subcategorySelect').html('');
+                    }
+                }
+            });
+        } else {
+            $('#subcategoryWrapper').hide();
+            $('#subcategorySelect').html('');
+        }
+    });
+});
+
+$(document).ready(function() {
+    $('#citySelect').select2({
+        placeholder: "Select available cities",
+        allowClear: true,
+        tags: false,
+        width: '100%',
+		theme: "bootstrap-5" 
+    });
+	 var input = document.querySelector('#expertiseTags');
+    new Tagify(input, {
+        whitelist: [], // Optional: Add predefined suggestions
+        dropdown: {
+            enabled: 0 // Set 1 to show suggestions on focus
+        }
+    });
+});
+document.getElementById('profileImageInput').addEventListener('change', function (e) {
+        const preview = document.getElementById('previewImage');
+        const file = e.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                preview.src = event.target.result;
+                preview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+        }
+    });
 document
-	.getElementById("slider_image")
+	.getElementById("service_image")
+	.addEventListener("change", function (event) {
+		const file = event.target.files[0];
+		const preview = document.getElementById("image_preview");
+
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (e) {
+				preview.src = e.target.result;
+			};
+			reader.readAsDataURL(file);
+		} else {
+			// Revert to default image if no file selected
+			preview.src = "noimage.png";
+		}
+	});
+
+document.getElementById("slider_image")
 	.addEventListener("change", function (e) {
 		const reader = new FileReader();
 		reader.onload = function (event) {
