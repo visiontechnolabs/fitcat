@@ -133,6 +133,11 @@
             <input type="text" id="expertiseTags" class="form-control" name="expertise_tags"
                 value="<?= htmlspecialchars($tags) ?>" placeholder="Enter tags" required>
         </div>
+       <div class="col-md-6 mb-3">
+    <label for="address" class="form-label">Address</label>
+    <textarea class="form-control" id="address" name="address" rows="3" 
+        placeholder="Enter full address With City And State"><?= isset($profile->address) && !empty($profile->address) ? htmlspecialchars($profile->address) : '' ?></textarea>
+</div>
 
         <!-- City Availability (multi-select) -->
         <div class="col-md-6 mb-3">

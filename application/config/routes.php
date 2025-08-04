@@ -78,6 +78,23 @@ $route['send_register_otp'] = 'provider/login/send_register_otp';
 $route['service'] = 'provider/service';
 $route['add_service'] = 'provider/service/add_service';
 $route['edit_service/(:num)'] = 'provider/service/edit_service/$1';
+$route['provider/logout'] = 'provider/login/logout';
+
+
+// User Route
+$route['providers'] = 'profile';
+$route['provider_details/(:num)'] = 'profile/provider_details/$1';
+$route['services'] = 'services';
+$route['login'] = 'login';
+$route['sign_in'] = 'login/sign_in';
+$route['cart'] = 'cart';
+
+
+
+
+
+
+
 
 
 

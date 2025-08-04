@@ -12,8 +12,12 @@ class Login extends CI_Controller
         $this->load->model('general_model');
         $provider = $this->session->userdata('provider');
 
-    if ($provider && isset($provider['is_logged_in']) && $provider['is_logged_in'] === true) {
-        redirect('provider/dashboard');
+    $current_method = $this->router->fetch_method();
+
+    if ($current_method !== 'logout') {
+        if ($provider && isset($provider['is_logged_in']) && $provider['is_logged_in'] === true) {
+            redirect('provider/dashboard');
+        }
     }
 
     }
@@ -162,6 +166,8 @@ class Login extends CI_Controller
             $user_data = [
                 'user_id' => $user_id,
                 'role' => 2,
+                'name'         => $form_data['firstname'] . ' ' . $form_data['lastname'],
+                 'gym_name'     => $form_data['business_name'],
                 'otp_verified' => true,
                 'is_logged_in' => false,
                 'is_registered' => true

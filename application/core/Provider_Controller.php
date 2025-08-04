@@ -18,6 +18,15 @@ class Provider_Controller extends CI_Controller
         if (!$this->provider) {
             redirect('provider/login');
         }
+// print_r($this->provider);
+// die;
+$provider_id = $this->provider['id'] ?? $this->provider['user_id'];
+        $provider_data = $this->general_model->getOne('provider', ['provider_id' => $provider_id]);
+
+        // Store image and make it accessible everywhere
+        $this->provider_image = !empty($provider_data->profile_image) 
+            ? base_url($provider_data->profile_image) 
+            : base_url('assets/images/3d-cartoon-fitness-man.jpg'); 
     }
 }
 

@@ -63,31 +63,55 @@ class Profile extends Provider_Controller
     }
 
     // Build provider data
-    $providerData = [
-        'provider_id'   => $provider_id,
-        'description'   => trim($input['description']),
-        'category'      => trim($input['category']),
-        'sub_category'  => trim($input['subcategory']),
-        'city'          => isset($input['availability']) ? implode(',', $input['availability']) : '',
-        'day_price'     => trim($input['price_day']),
-        'week_price'    => trim($input['price_week']),
-        'month_price'   => trim($input['price_month']),
-        'year_price'    => trim($input['price_year']),
-        'isActive'      => 1,
-        'created_on'    => date('Y-m-d')
-    ];
+   $address = trim($input['address']);
 
-    if ($profile_image) {
-        $providerData['profile_image'] = $profile_image;
-    }
+// Call OpenStreetMap API to get lat/lng
+$ch = curl_init();
+curl_setopt($ch, CURLOPT_URL, "https://nominatim.openstreetmap.org/search?format=json&q=" . urlencode($address));
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt($ch, CURLOPT_USERAGENT, 'FitTicketApp/1.0 (support@fitticket.com)');
+$response = curl_exec($ch);
+curl_close($ch);
 
-    // Insert or update provider
-    $existing = $this->general_model->getOne('provider', ['provider_id' => $provider_id]);
-    if ($existing) {
-        $this->general_model->update('provider', $providerData, ['provider_id' => $provider_id]);
-    } else {
-        $this->general_model->insert('provider', $providerData);
+$latitude = null;
+$longitude = null;
+
+if ($response) {
+    $data = json_decode($response, true);
+    if (!empty($data)) {
+        $latitude = $data[0]['lat'];
+        $longitude = $data[0]['lon'];
     }
+}
+
+$providerData = [
+    'provider_id'   => $provider_id,
+    'description'   => $input['description'],
+    'category'      => $input['category'],
+    'sub_category'  => $input['subcategory'],
+    'city'          => isset($input['availability']) ? implode(',', $input['availability']) : '',
+    'address'       => $address,
+    'day_price'     => $input['price_day'],
+    'week_price'    => $input['price_week'],
+    'month_price'   => $input['price_month'],
+    'year_price'    => $input['price_year'],
+    'latitude'      => $latitude,
+    'longitude'     => $longitude,
+    'isActive'      => 1,
+    'created_on'    => date('Y-m-d')
+];
+
+if ($profile_image) {
+    $providerData['profile_image'] = $profile_image;
+}
+
+$existing = $this->general_model->getOne('provider', ['provider_id' => $provider_id]);
+if ($existing) {
+    $this->general_model->update('provider', $providerData, ['provider_id' => $provider_id]);
+} else {
+    $this->general_model->insert('provider', $providerData);
+}
+
 
     // Process expertise tags
     $tags = [];

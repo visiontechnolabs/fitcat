@@ -13,7 +13,7 @@ class User_Controller extends CI_Controller
         $this->load->helper(['url', 'form']);
         $this->load->model('general_model');
 
-        // $this->user = $this->session->userdata('user');
+        $this->user = $this->session->userdata('user');
 
         // if (!$this->user || !$this->user['is_logged_in']) {
         //     redirect('login');

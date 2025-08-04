@@ -25,8 +25,8 @@
 	<link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.2.0/dist/select2-bootstrap-5-theme.min.css"
 		rel="stylesheet" />
 
-<!-- Tagify CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
+	<!-- Tagify CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css">
 
 	<!-- Google Fonts (CDN) -->
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -42,13 +42,23 @@
 	<link rel="stylesheet" href="<?= base_url('assets/sass/bordered-theme.css') ?>">
 
 
-<title><?= isset($this->provider['gym_name']) ? $this->provider['gym_name'] : 'Dashboard'; ?></title>
+	<title><?= isset($this->provider['gym_name']) ? $this->provider['gym_name'] : 'Dashboard'; ?></title>
 	<script>
 		(function () {
 			var savedTheme = localStorage.getItem('theme') || 'light';
 			document.documentElement.setAttribute('data-bs-theme', savedTheme);
 		})();
 	</script>
+	<style>
+		.user-img {
+    transition: transform 0.3s ease-in-out;
+}
+.user-img:hover {
+    transform: scale(2); /* Zooms image */
+    z-index: 1000;
+}
+
+	</style>
 </head>
 
 <body>
@@ -1010,19 +1020,21 @@
 					<div class="user-box dropdown px-3">
 						<a class="d-flex align-items-center nav-link dropdown-toggle gap-3 dropdown-toggle-nocaret"
 							href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-							<img src="assets/images/avatars/avatar-2.png" class="user-img" alt="user avatar">
-							<?php
-							$provider = $this->session->userdata('provider');
-							$gym_name = isset($provider['gym_name']) ? $provider['gym_name'] : 'Unknown Gym';
-							$user_name = isset($provider['name']) ? $provider['name'] : 'User';
-							?>
+
+							<img src="<?= $this->provider_image ?>"
+								class="user-img rounded-circle img-thumbnail transition"
+								style="width:40px; height:40px; object-fit:cover;" alt="user avatar">
+
 							<div class="user-info">
-								<p class="user-name mb-0"><?= $gym_name ?></p>
-								<p class="designattion mb-0"><?= $user_name ?></p>
+								<p class="user-name mb-0"><?= $this->provider['gym_name'] ?? 'Unknown Gym' ?></p>
+								<p class="designattion mb-0"><?= $this->provider['name'] ?? 'User' ?></p>
 							</div>
 						</a>
+
+
 						<ul class="dropdown-menu dropdown-menu-end">
-							<li><a class="dropdown-item d-flex align-items-center" href="<?= base_url('provider/profile');?>"><i
+							<li><a class="dropdown-item d-flex align-items-center"
+									href="<?= base_url('provider/profile'); ?>"><i
 										class="bx bx-user fs-5"></i><span>Profile</span></a></li>
 							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
 										class="bx bx-file fs-5"></i><span>Documents</span></a></li>
@@ -1033,7 +1045,8 @@
 							<li>
 								<div class="dropdown-divider mb-0"></div>
 							</li>
-							<li><a class="dropdown-item d-flex align-items-center" href="javascript:;"><i
+							<li><a class="dropdown-item d-flex align-items-center"
+									href="<?= base_url('provider/logout'); ?>"><i
 										class="bx bx-log-out fs-5"></i><span>Logout</span></a></li>
 						</ul>
 
