@@ -520,7 +520,152 @@ $(document).ready(function () {
 	// Initial load
 	loadSubcategories(currentPage);
 });
+$(document).ready(function () {
+	let limit = 10; // rows per page
+	let offset = 0;
 
+	function loadPartners(offset, search = "") {
+		$.ajax({
+			url: site_url + "admin/partner/fetchPartners",
+			type: "POST",
+			data: { limit: limit, offset: offset, search: search },
+			dataType: "json",
+			success: function (response) {
+				let html = "";
+				if (response.partners.length > 0) {
+					$.each(response.partners, function (index, partner) {
+						html += `<tr>
+                            <td>${offset + index + 1}</td>
+                            <td><img src="${
+															partner.profile_image
+														}" alt="Image" width="50"></td>
+                            <td>${partner.partner_name}</td>
+                            <td>${partner.gym_name}</td>
+                            <td>${partner.mobile}</td>
+                            <td>${partner.address}</td>
+							<td>
+							<div class="d-flex order-actions align-items-center">
+								<a href="${site_url}loginAsPartner/${partner.id}" 
+           class="ms-2" title="Login">
+            <i class="bx bx-log-in"></i>
+        </a>
+								<a href="javascript:void(0);" class="btn-toggle-status ms-2" 
+								data-id="${partner.id}" 
+								data-status="${partner.user_isActive}"
+								title="${partner.user_isActive == 1 ? "Deactivate" : "Activate"}">
+								<i class="bx ${partner.user_isActive == 1 ? "bx-user-x" : "bx-user-check"}"></i>
+								</a>
+							</div>
+								
+							</td>
+                        </tr>`;
+					});
+				} else {
+					html = `<tr><td colspan="6" class="text-center">No partners found</td></tr>`;
+				}
+				$("#partnerTableBody").html(html);
+
+				// Pagination
+				let totalPages = Math.ceil(response.total / limit);
+				let paginationHtml = "";
+				for (let i = 0; i < totalPages; i++) {
+					paginationHtml += `<li class="page-item ${
+						offset / limit == i ? "active" : ""
+					}">
+                        <a class="page-link" href="#" data-offset="${
+													i * limit
+												}">${i + 1}</a></li>`;
+				}
+				$(".pagination").html(`
+                    <li class="page-item"><a class="page-link prev" href="#">Previous</a></li>
+                    ${paginationHtml}
+                    <li class="page-item"><a class="page-link next" href="#">Next</a></li>
+                `);
+			},
+		});
+	}
+
+	// Initial load
+	loadPartners(offset);
+
+	// Search
+	$(".radius-30").keyup(function () {
+		let search = $(this).val();
+		offset = 0;
+		loadPartners(offset, search);
+	});
+	
+
+	$(document).on("click", ".btn-toggle-status", function () {
+		let partnerId = $(this).data("id");
+		let currentStatus = $(this).data("status");
+		let newStatus = currentStatus == 1 ? 0 : 1;
+
+		let actionText = newStatus == 0 ? "deactivate" : "activate";
+
+		Swal.fire({
+			title: `Are you sure you want to ${actionText} this partner?`,
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: `Yes, ${actionText}!`,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url: site_url + "admin/partner/togglePartnerStatus",
+					type: "POST",
+					data: { partner_id: partnerId, status: newStatus },
+					dataType: "json",
+					success: function (response) {
+						if (response.status === "success") {
+							Swal.fire({
+								icon: "success",
+								title: `Partner ${actionText}d successfully.`,
+								timer: 1500,
+								showConfirmButton: false,
+							});
+							loadPartners(offset, $(".radius-30").val());
+						} else {
+							Swal.fire({
+								icon: "error",
+								title: "Failed!",
+								text: response.message,
+							});
+						}
+					},
+					error: function () {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: "Something went wrong!",
+						});
+					},
+				});
+			}
+		});
+	});
+
+	// Pagination click
+	$(document).on("click", ".pagination .page-link", function (e) {
+		e.preventDefault();
+		let page = $(this).data("offset");
+		if (page !== undefined) {
+			offset = page;
+			loadPartners(offset, $(".radius-30").val());
+		}
+	});
+
+	// Prev/Next
+	$(document).on("click", ".pagination .prev", function () {
+		if (offset >= limit) {
+			offset -= limit;
+			loadPartners(offset, $(".radius-30").val());
+		}
+	});
+	$(document).on("click", ".pagination .next", function () {
+		offset += limit;
+		loadPartners(offset, $(".radius-30").val());
+	});
+});
 $("#EditSubcategoryForm").on("submit", function (e) {
 	e.preventDefault(); // Prevent form from submitting normally
 
@@ -1046,79 +1191,87 @@ $(document).ready(function () {
 	});
 });
 $(document).ready(function () {
-    $('#ProfileForm').on('submit', function (e) {
-        e.preventDefault();
+	$("#ProfileForm").on("submit", function (e) {
+		e.preventDefault();
 
-        let form = this;
-        let formData = new FormData(form);
+		let form = this;
+		let formData = new FormData(form);
 
-        // Clear previous validation errors
-        $('.is-invalid').removeClass('is-invalid');
-        $('.invalid-feedback').remove();
+		// Clear previous validation errors
+		$(".is-invalid").removeClass("is-invalid");
+		$(".invalid-feedback").remove();
 
-        let isValid = true;
+		let isValid = true;
 
-        $(form).find('input, select, textarea').each(function () {
-            let $input = $(this);
-            let value = $input.val();
+		$(form)
+			.find("input, select, textarea")
+			.each(function () {
+				let $input = $(this);
+				let value = $input.val();
 
-            // Skip disabled or hidden fields
-            if ($input.is(':disabled') || $input.is(':hidden')) return;
+				// Skip disabled or hidden fields
+				if ($input.is(":disabled") || $input.is(":hidden")) return;
 
-            // Handle multi-select
-            if ($input.is('select[multiple]')) {
-                if ($input.prop('required') && (!value || value.length === 0)) {
-                    $input.addClass('is-invalid');
-                    $input.after('<div class="invalid-feedback">This field is required.</div>');
-                    isValid = false;
-                }
-                return; // skip further checks for multi-select
-            }
+				// Handle multi-select
+				if ($input.is("select[multiple]")) {
+					if ($input.prop("required") && (!value || value.length === 0)) {
+						$input.addClass("is-invalid");
+						$input.after(
+							'<div class="invalid-feedback">This field is required.</div>'
+						);
+						isValid = false;
+					}
+					return; // skip further checks for multi-select
+				}
 
-            // General required field validation
-            if ($input.prop('required') && (value === null || $.trim(value) === '')) {
-                $input.addClass('is-invalid');
-                $input.after('<div class="invalid-feedback">This field is required.</div>');
-                isValid = false;
-            }
-        });
+				// General required field validation
+				if (
+					$input.prop("required") &&
+					(value === null || $.trim(value) === "")
+				) {
+					$input.addClass("is-invalid");
+					$input.after(
+						'<div class="invalid-feedback">This field is required.</div>'
+					);
+					isValid = false;
+				}
+			});
 
-        if (!isValid) return;
+		if (!isValid) return;
 
-        // Optional: disable submit button during save
-        let $submitBtn = $(form).find('button[type="submit"]');
-        $submitBtn.prop('disabled', true).text('Saving...');
+		// Optional: disable submit button during save
+		let $submitBtn = $(form).find('button[type="submit"]');
+		$submitBtn.prop("disabled", true).text("Saving...");
 
-        $.ajax({
-            url: site_url + "provider/profile/save",
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function (response) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Profile Updated!',
-                    text: 'Your information has been successfully saved.',
-                    confirmButtonColor: '#28a745'
-                });
-            },
-            error: function (xhr) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: 'Something went wrong. Please try again!',
-                    confirmButtonColor: '#dc3545'
-                });
-            },
-            complete: function () {
-                // Re-enable the submit button
-                $submitBtn.prop('disabled', false).text('Save');
-            }
-        });
-    });
+		$.ajax({
+			url: site_url + "provider/profile/save",
+			type: "POST",
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function (response) {
+				Swal.fire({
+					icon: "success",
+					title: "Profile Updated!",
+					text: "Your information has been successfully saved.",
+					confirmButtonColor: "#28a745",
+				});
+			},
+			error: function (xhr) {
+				Swal.fire({
+					icon: "error",
+					title: "Error",
+					text: "Something went wrong. Please try again!",
+					confirmButtonColor: "#dc3545",
+				});
+			},
+			complete: function () {
+				// Re-enable the submit button
+				$submitBtn.prop("disabled", false).text("Save");
+			},
+		});
+	});
 });
-
 
 $(document).ready(function () {
 	$("#EditCityForm").on("submit", function (e) {
@@ -1264,68 +1417,71 @@ $(document).ready(function () {
 	});
 });
 $(document).ready(function () {
-    $('#categorySelect').on('change', function () {
-        let categoryId = $(this).val();
+	$("#categorySelect").on("change", function () {
+		let categoryId = $(this).val();
 
-        if (categoryId) {
-            $.ajax({
-                url: site_url + "provider/profile/get_subcategories",
-                type: 'POST',
-                data: { category_id: categoryId },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.length > 0) {
-                        let options = '<option value="">-- Select Subcategory --</option>';
-                        $.each(data, function (i, subcat) {
-                            options += `<option value="${subcat.id}">${subcat.title}</option>`;
-                        });
-                        $('#subcategorySelect').html(options);
-                        $('#subcategoryWrapper').show();
-                    } else {
-                        $('#subcategoryWrapper').hide();
-                        $('#subcategorySelect').html('');
-                    }
-                }
-            });
-        } else {
-            $('#subcategoryWrapper').hide();
-            $('#subcategorySelect').html('');
-        }
-    });
+		if (categoryId) {
+			$.ajax({
+				url: site_url + "provider/profile/get_subcategories",
+				type: "POST",
+				data: { category_id: categoryId },
+				dataType: "json",
+				success: function (data) {
+					if (data.length > 0) {
+						let options = '<option value="">-- Select Subcategory --</option>';
+						$.each(data, function (i, subcat) {
+							options += `<option value="${subcat.id}">${subcat.title}</option>`;
+						});
+						$("#subcategorySelect").html(options);
+						$("#subcategoryWrapper").show();
+					} else {
+						$("#subcategoryWrapper").hide();
+						$("#subcategorySelect").html("");
+					}
+				},
+			});
+		} else {
+			$("#subcategoryWrapper").hide();
+			$("#subcategorySelect").html("");
+		}
+	});
 });
 
-$(document).ready(function() {
-    $('#citySelect').select2({
-        placeholder: "Select available cities",
-        allowClear: true,
-        tags: false,
-        width: '100%',
-		theme: "bootstrap-5" 
-    });
-	 var input = document.querySelector('#expertiseTags');
-    new Tagify(input, {
-        whitelist: [], // Optional: Add predefined suggestions
-        dropdown: {
-            enabled: 0 // Set 1 to show suggestions on focus
-        }
-    });
+$(document).ready(function () {
+	$("#citySelect").select2({
+		placeholder: "Select available cities",
+		allowClear: true,
+		tags: false,
+		width: "100%",
+		theme: "bootstrap-5",
+	});
+	var input = document.querySelector("#expertiseTags");
+	new Tagify(input, {
+		whitelist: [], // Optional: Add predefined suggestions
+		dropdown: {
+			enabled: 0, // Set 1 to show suggestions on focus
+		},
+	});
 });
-document.getElementById('profileImageInput').addEventListener('change', function (e) {
-        const preview = document.getElementById('previewImage');
-        const file = e.target.files[0];
+document
+	.getElementById("profileImageInput")
+	.addEventListener("change", function (e) {
+		const preview = document.getElementById("previewImage");
+		const file = e.target.files[0];
 
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                preview.src = event.target.result;
-                preview.style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        } else {
-            preview.src = '';
-            preview.style.display = 'none';
-        }
-    });
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = function (event) {
+				preview.src = event.target.result;
+				preview.style.display = "block";
+			};
+			reader.readAsDataURL(file);
+		} else {
+			preview.src = "";
+			preview.style.display = "none";
+		}
+	});
+
 document
 	.getElementById("service_image")
 	.addEventListener("change", function (event) {
@@ -1344,7 +1500,8 @@ document
 		}
 	});
 
-document.getElementById("slider_image")
+document
+	.getElementById("slider_image")
 	.addEventListener("change", function (e) {
 		const reader = new FileReader();
 		reader.onload = function (event) {

@@ -163,17 +163,10 @@ class Login extends CI_Controller
             ]);
             $user_id = $this->db->insert_id();
 
-            $user_data = [
-                'user_id' => $user_id,
-                'role' => 2,
-                'name'         => $form_data['firstname'] . ' ' . $form_data['lastname'],
-                 'gym_name'     => $form_data['business_name'],
-                'otp_verified' => true,
-                'is_logged_in' => false,
-                'is_registered' => true
-            ];
+           $user_data = $this->general_model->getOne('users',array('id'=>$user_id));
 
             $this->session->set_userdata('provider', $user_data);
+            
 
             $this->session->unset_userdata('otp');
             $this->session->unset_userdata('register_form_data');

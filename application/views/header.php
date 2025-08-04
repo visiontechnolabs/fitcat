@@ -11,6 +11,13 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
   <style>
+    footer .bi {
+    font-size: 1.2rem;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
     .top-bar {
       background-color: #007bff;
       color: #fff;
@@ -410,6 +417,63 @@
       padding: 0;
       text-align: center;
     }
+     @media (max-width: 768px) {
+    .top-bar {
+      display: none !important;
+    }
+  }
+
+  /* Bottom Menu */
+  .mobile-bottom-menu {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-top: 1px solid #ddd;
+    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 8px 0;
+    z-index: 1050;
+  }
+
+  .mobile-bottom-menu a {
+    text-decoration: none;
+    color: #6c757d;
+    font-size: 13px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: color 0.3s;
+  }
+
+  .mobile-bottom-menu a i {
+    font-size: 18px;
+    margin-bottom: 3px;
+    background: #f1f1f1;
+    padding: 8px;
+    border-radius: 50%;
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .mobile-bottom-menu a.active,
+  .mobile-bottom-menu a:hover {
+    color: #007bff;
+  }
+
+  .mobile-bottom-menu a.active i,
+  .mobile-bottom-menu a:hover i {
+    background: #007bff;
+    color: #fff;
+  }
+
+  @media (min-width: 769px) {
+    .mobile-bottom-menu {
+      display: none;
+    }
+  }
   </style>
 </head>
 
@@ -431,79 +495,100 @@
   </div>
 
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg bg-white shadow-sm">
-    <div class="container">
-      <!-- Logo -->
-      <a class="navbar-brand d-flex align-items-center" href="#">
-        <img src="<?= base_url('assets/images/logo_ficat.png'); ?>" alt="logo" style="width:100px;height:50px"
-          class="me-2">
-        <!-- <span class="logo">eDemand <small class="text-muted d-block" style="font-size:12px;">Home service</small></span> -->
-      </a>
+ <!-- Navbar -->
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm">
+  <div class="container d-flex justify-content-between align-items-center">
+    
+    <!-- Logo -->
+    <a class="navbar-brand ms-2" href="#">
+      <img src="<?= base_url('assets/images/logo_ficat.png'); ?>" alt="logo" style="width:100px;height:50px">
+    </a>
 
-      <!-- Toggler -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-        <span class="navbar-toggler-icon"></span>
+    <!-- Cart and Hamburger (Visible only on Mobile) -->
+    <div class="d-flex d-lg-none align-items-center">
+      <div class="cart-icon me-3">
+        <i class="fa fa-shopping-cart text-primary"></i>
+        <span class="cart-badge">1</span>
+      </div>
+      <button class="btn btn-outline-primary" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
+        <i class="fa fa-bars"></i>
       </button>
+    </div>
 
-      <!-- Menu -->
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <?php
-        $segment = $this->uri->segment(1);
-        ?>
-        <ul class="navbar-nav mx-auto">
-          <li class="nav-item">
-            <a class="nav-link <?= ($segment == '' ? 'active' : '') ?>" href="<?= base_url(); ?>">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link <?= ($segment == 'services' ? 'active' : '') ?>"
-              href="<?= base_url('services'); ?>">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link <?= ($segment == 'providers' ? 'active' : '') ?>"
-              href="<?= base_url('providers'); ?>">Providers</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link <?= ($segment == 'about-us' ? 'active' : '') ?>"
-              href="<?= base_url('about-us'); ?>">About Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link <?= ($segment == 'contact-us' ? 'active' : '') ?>"
-              href="<?= base_url('contact-us'); ?>">Contact Us</a>
-          </li>
-        </ul>
-
-
-        <!-- Cart and Account -->
-        <div class="d-flex align-items-center">
-          <div class="cart-icon me-3">
-            <i class="fa fa-shopping-cart text-primary"></i>
-            <span class="cart-badge">1</span>
-          </div>
-          <?php
-          $is_logged_in = isset($this->user);
-          ?>
-          <div class="dropdown">
-            <?php if ($is_logged_in): ?>
-              <!-- Show dropdown if user is logged in -->
-              <button class="account-btn dropdown-toggle btn btn-outline-secondary" data-bs-toggle="dropdown">
-                <i class="fa fa-user me-1"></i> Account
-              </button>
-              <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><a class="dropdown-item" href="#">My Bookings</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="logout.php">Logout</a></li>
-              </ul>
-            <?php else: ?>
-              <!-- Show login button if not logged in -->
-              <a href="<?= base_url('login'); ?>" class="btn btn-outline-primary">
-                <i class="fa fa-user me-1"></i> Login
-              </a>
-            <?php endif; ?>
-          </div>
+    <!-- Desktop Menu -->
+    <div class="collapse navbar-collapse d-none d-lg-flex" id="navbarNav">
+      <?php $segment = $this->uri->segment(1); ?>
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link <?= ($segment == '' ? 'active' : '') ?>" href="<?= base_url(); ?>">Home</a></li>
+        <li class="nav-item"><a class="nav-link <?= ($segment == 'services' ? 'active' : '') ?>" href="<?= base_url('services'); ?>">Services</a></li>
+        <li class="nav-item"><a class="nav-link <?= ($segment == 'providers' ? 'active' : '') ?>" href="<?= base_url('providers'); ?>">Providers</a></li>
+        <li class="nav-item"><a class="nav-link <?= ($segment == 'about-us' ? 'active' : '') ?>" href="<?= base_url('about-us'); ?>">About Us</a></li>
+        <li class="nav-item"><a class="nav-link <?= ($segment == 'contact-us' ? 'active' : '') ?>" href="<?= base_url('contact-us'); ?>">Contact Us</a></li>
+      </ul>
+      <div class="d-flex align-items-center">
+        <div class="cart-icon me-3">
+          <i class="fa fa-shopping-cart text-primary"></i>
+          <span class="cart-badge">1</span>
+        </div>
+        <div class="dropdown">
+          <?php $is_logged_in = isset($this->user); ?>
+          <?php if ($is_logged_in): ?>
+            <button class="account-btn dropdown-toggle btn btn-outline-secondary" data-bs-toggle="dropdown">
+              <i class="fa fa-user me-1"></i> Account
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="<?= base_url('profile');?>">Profile</a></li>
+              <li><a class="dropdown-item" href="#">My Bookings</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+            </ul>
+          <?php else: ?>
+            <a href="<?= base_url('login'); ?>" class="btn btn-outline-primary">
+              <i class="fa fa-user me-1"></i> Login
+            </a>
+          <?php endif; ?>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
+
+<!-- Mobile Offcanvas Menu -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileMenu">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">
+      <img src="<?= base_url('assets/images/logo_ficat.png'); ?>" alt="logo" style="width:100px;height:40px">
+    </h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="navbar-nav">
+      <li class="nav-item"><a class="nav-link" href="<?= base_url(); ?>">Home</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('about-us'); ?>">About Us</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('contact-us'); ?>">Contact Us</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('provider'); ?>">Become Provider</a></li>
+
+    </ul>
+  </div>
+</div>
+
+<!-- Bottom Sticky Menu -->
+<div class="mobile-bottom-menu">
+  <a href="<?= base_url(); ?>" class="<?= ($segment == '' ? 'active' : '') ?>">
+    <i class="fa fa-home"></i>
+    <span>Home</span>
+  </a>
+  <a href="<?= base_url('providers'); ?>" class="<?= ($segment == 'providers' ? 'active' : '') ?>">
+    <i class="fa fa-users"></i>
+    <span>Providers</span>
+  </a>
+  <a href="<?= base_url('services'); ?>" class="<?= ($segment == 'services' ? 'active' : '') ?>">
+    <i class="fa fa-cogs"></i>
+    <span>Services</span>
+  </a>
+  <a href="<?= base_url('profile'); ?>" class="<?= ($segment == 'profile' ? 'active' : '') ?>">
+    <i class="fa fa-user"></i>
+    <span>Profile</span>
+  </a>
+</div>

@@ -68,6 +68,12 @@ $route['add_slider'] = 'admin/category/add_slider';
 $route['city'] = 'admin/category/city';
 $route['add_city'] = 'admin/category/add_city';
 $route['edit_city/(:num)'] = 'admin/category/edit_city/$1';
+$route['partner'] = 'admin/partner';
+$route['loginAsPartner/(:num)'] = 'admin/partner/loginAsPartner/$1';
+$route['customers'] = 'admin/customers';
+
+
+
 
 //provider route
 $route['wallet'] = 'provider/wallet';
@@ -88,6 +94,8 @@ $route['services'] = 'services';
 $route['login'] = 'login';
 $route['sign_in'] = 'login/sign_in';
 $route['cart'] = 'cart';
+$route['profile'] = 'profile/profile';
+
 
 
 

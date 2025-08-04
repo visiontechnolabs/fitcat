@@ -115,18 +115,12 @@
 					</ul>
 			 </li>
 			 <li>
-					<a href="javascript:;" class="has-arrow">
+					<a href="<?= base_url('partner');?>" class="">
 						<div class="parent-icon"><i class="bx bx-user-circle"></i>
 						</div>
 						<div class="menu-title">Partner</div>
 					</a>
-					<ul>
-						<li> <a href="<?= base_url('customer');?>"><i class='bx bx-radio-circle'></i>All Partner</a>
-						</li>
-						<li> <a href="<?= base_url('add_customer');?>"><i class='bx bx-radio-circle'></i>Add Partner</a>
-						</li>
-						
-					</ul>
+					
 			 </li>
 			 <li>
 					<a href="javascript:;" class="has-arrow">
@@ -143,7 +137,7 @@
 					</ul>
 			 </li>
 			<li class="">
-							<a href="widgets.html" aria-expanded="false">
+							<a href="<?= base_url('customers');?>" aria-expanded="false">
 								<div class="parent-icon"><i class="bx bx-group"></i>
 								</div>
 								<div class="menu-title">Customers</div>

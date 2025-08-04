@@ -115,5 +115,10 @@ class Profile extends User_Controller
 
         return ['city' => $city, 'state' => $state];
     }
-
+    public function profile()
+    {
+        $this->load->view('header');
+        $this->load->view('user_profile_view');
+        $this->load->view('footer');
+    }
 }

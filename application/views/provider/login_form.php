@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!--favicon-->
-    <link rel="icon" href="<?= base_url('assets/images/favicon-32x32.png') ?>" type="image/png">
+    <link rel="icon" href="<?= base_url('') ?>" type="image/png">
     <!--plugins-->
     <link href="<?= base_url('assets/plugins/simplebar/css/simplebar.css') ?>" rel="stylesheet">
     <link href="<?= base_url('assets/plugins/perfect-scrollbar/css/perfect-scrollbar.css') ?>" rel="stylesheet">
@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="<?= base_url('assets/sass/dark-theme.css') ?>">
     <link href="<?= base_url('assets/css/icons.css') ?>" rel="stylesheet">
 
-    <title>Syndron - Bootstrap 5 Admin Dashboard Template</title>
+    <!-- <title>Syndron - Bootstrap 5 Admin Dashboard Template</title> -->
 </head>
 
 <body class="">
@@ -74,12 +74,12 @@
 
                                 <!-- alerts end -->
                                 <div class="p-4">
-                                    <div class="mb-3 text-center">
-                                        <img src="assets/images/logo-icon.png" width="60" alt="" />
+                                   <div class="mb-3 text-center">
+                                        <img src="http://localhost/fitcat/assets/images/logo_ficat.png" width="" alt="">
                                     </div>
                                     <div class="text-center mb-4">
                                         <h5 class="">
-                                            <?= isset($user_data['store_name']) ? $user_data['store_name'] : '' ?> Admin
+                                            <?= isset($user_data['store_name']) ? $user_data['store_name'] : '' ?> 
                                         </h5>
                                         <p class="mb-0">Please log in to your account</p>
                                     </div>
