@@ -111,7 +111,7 @@ function checkLogin(userId) {
 
         // If user not logged in, redirect to login
         if (parseInt(userId) === 0) {
-            window.location.assign('<?= site_url(); ?>login');
+window.location.assign(site_url + "login");
         } else {
             // Logged in: submit the form
             document.getElementById('cartForm').submit();
