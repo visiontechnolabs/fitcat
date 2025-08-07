@@ -199,31 +199,41 @@
                         </div>
 
 
-                        <div class="list-group mt-5">
-                            <label class="list-group-item">
-                                <input class="form-check-input me-2" type="radio" name="priceOption" data-price="100"
-                                    data-label="Day" checked>
-                                ₹100.00 <small class="text-muted">/day</small>
-                            </label>
-                            <label class="list-group-item">
-                                <input class="form-check-input me-2" type="radio" name="priceOption" data-price="300"
-                                    data-label="Week">
-                                ₹300.00 <small class="text-muted">/week</small>
-                            </label>
-                            <label class="list-group-item">
-                                <input class="form-check-input me-2" type="radio" name="priceOption" data-price="750"
-                                    data-label="Month">
-                                ₹750.00 <small class="text-muted">/month</small>
-                            </label>
-                            <label class="list-group-item">
-                                <input class="form-check-input me-2" type="radio" name="priceOption" data-price="9000"
-                                    data-label="Year">
-                                ₹9000.00 <small class="text-muted">/year</small>
-                            </label>
-                        </div>
+                      <div class="list-group mt-5">
+    <?php if (!empty($provider)) : ?>
+        <label class="list-group-item">
+            <input class="form-check-input me-2" type="radio" name="priceOption"
+                data-price="<?= $provider->day_price; ?>"
+                data-label="Day" checked>
+            ₹<?= number_format($provider->day_price, 2); ?> <small class="text-muted">/day</small>
+        </label>
+
+        <label class="list-group-item">
+            <input class="form-check-input me-2" type="radio" name="priceOption"
+                data-price="<?= $provider->week_price; ?>"
+                data-label="Week">
+            ₹<?= number_format($provider->week_price, 2); ?> <small class="text-muted">/week</small>
+        </label>
+
+        <label class="list-group-item">
+            <input class="form-check-input me-2" type="radio" name="priceOption"
+                data-price="<?= $provider->month_price; ?>"
+                data-label="Month">
+            ₹<?= number_format($provider->month_price, 2); ?> <small class="text-muted">/month</small>
+        </label>
+
+        <label class="list-group-item">
+            <input class="form-check-input me-2" type="radio" name="priceOption"
+                data-price="<?= $provider->year_price; ?>"
+                data-label="Year">
+            ₹<?= number_format($provider->year_price, 2); ?> <small class="text-muted">/year</small>
+        </label>
+    <?php endif; ?>
+</div>
+
 
                         <form method="post" action="<?= site_url('cart/add_to_cart'); ?>" id="cartForm">
-                            <input type="hidden" name="provider_id" value="<?= $provider->provider_id; ?>">
+                            <input type="hidden" name="provider_id" id="provider_id" value="<?= $provider->provider_id; ?>">
                             <input type="hidden" name="provider_name" value="<?= $provider->gym_name; ?>">
                             <input type="hidden" name="provider_image"
                                 value="<?= base_url($provider->profile_image); ?>">
@@ -241,11 +251,13 @@
                             </div>
 
                             <h6 class="fw-bold mb-2 text-uppercase text-secondary mt-4">Start From</h6>
-                            <input type="text" class="form-control mb-3" placeholder="dd-mm-yyyy"
+                            <input type="text" class="form-control" id="startDate" placeholder="dd-mm-yyyy"
                                 onfocus="(this.type='date')" name="start_date" onblur="(this.type='text')">
+                            <small id="dateError" class="text-danger d-none"></small>
 
-                            <button type="submit" class="btn btn-primary w-100 py-2 fw-bold"
-                                onclick="checkLogin(<?= isset($this->user['id']) ? $this->user['id'] : '0'; ?>)">
+
+                            <button type="button" class="btn btn-primary w-100 py-2  mt-2 fw-bold"
+                                onclick="validateAndBook(<?= isset($this->user['id']) ? $this->user['id'] : '0'; ?>)">
                                 Book Now
                             </button>
                         </form>

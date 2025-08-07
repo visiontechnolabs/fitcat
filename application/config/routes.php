@@ -95,6 +95,8 @@ $route['login'] = 'login';
 $route['sign_in'] = 'login/sign_in';
 $route['cart'] = 'cart';
 $route['profile'] = 'profile/profile';
+$route['contact'] = 'home/contact';
+
 
 
 

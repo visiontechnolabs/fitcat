@@ -83,4 +83,11 @@ $gym_id = $gym_sub ? $gym_sub->id : 0;
     $this->session->set_userdata('user_location', $location);
     echo 'success';
 }
+
+public function contact(){
+    $this->load->view('header');
+    $this->load->view('contact_view');
+    $this->load->view('footer');
+
+}
 }

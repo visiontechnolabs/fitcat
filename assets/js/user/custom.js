@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
+
 document.addEventListener("DOMContentLoaded", function () {
     // Keep the selected tab active after reload
     var activeTab = window.location.hash;
@@ -88,6 +89,34 @@ function checkLogin(userId) {
         window.location.assign(site_url + "cart");
     }
   }
+  function validateAndBook(userId) {
+        const startDateInput = document.getElementById('startDate');
+        const dateError = document.getElementById('dateError');
+        const selectedDate = new Date(startDateInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Validate date field
+        if (!startDateInput.value) {
+            dateError.textContent = "Please select a start date.";
+            dateError.classList.remove('d-none');
+            return;
+        }
+        if (selectedDate < today) {
+            dateError.textContent = "Start date cannot be earlier than today.";
+            dateError.classList.remove('d-none');
+            return;
+        }
+        dateError.classList.add('d-none');
+
+        // If user not logged in, redirect to login
+        if (parseInt(userId) === 0) {
+            window.location.assign('<?= site_url(); ?>login');
+        } else {
+            // Logged in: submit the form
+            document.getElementById('cartForm').submit();
+        }
+    }
 document.querySelectorAll("input[name='priceOption']").forEach(radio => {
     radio.addEventListener("change", function () {
         document.getElementById("priceInput").value = this.dataset.price;
@@ -96,7 +125,8 @@ document.querySelectorAll("input[name='priceOption']").forEach(radio => {
     });
 });
 $(document).ready(function () {
-    let providerId = "<?= $provider->provider_id; ?>";
+    let providerId = $('#provider_id').val();
+    // alert(providerId);
     let duration = "day"; // You can make this dynamic if needed
     let price = 100; // Update dynamically if needed
 
@@ -120,7 +150,7 @@ $(document).ready(function () {
 
     function updateCart(qty, action) {
         $.ajax({
-            url: "<?= site_url('cart/update_cart'); ?>",
+            url: site_url+"cart/update_cart",
             type: "POST",
             data: {
                 provider_id: providerId,

@@ -68,10 +68,10 @@ class Profile extends User_Controller
                 $this->data['provider']->latitude,
                 $this->data['provider']->longitude
             );
-            // echo "<pre>";
-//      print_r($this->data['provider']);
+    //         echo "<pre>";
+    //  print_r($this->data['provider']);
 
-            //     die;
+    //             die;
 
             $this->data['city'] = $locationData['city'];
             $this->data['state'] = $locationData['state'];

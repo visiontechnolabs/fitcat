@@ -288,6 +288,7 @@ $(document).ready(function () {
 	// Initialize
 	loadPage();
 });
+
 $(document).on("click", ".toggle-status-btn", function () {
 	const button = $(this);
 	const postId = button.data("id");
@@ -997,6 +998,7 @@ $(document).ready(function () {
 		}
 	});
 });
+
 $("#CityForm").on("submit", function (e) {
 	e.preventDefault();
 

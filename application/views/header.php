@@ -401,7 +401,7 @@ footer a:hover {
 
     .cart-item img {
       width: 100px;
-      height: 100px;
+      /* height: 100px; */
       object-fit: cover;
     }
 
@@ -474,6 +474,7 @@ footer a:hover {
       display: none;
     }
   }
+  
   </style>
 </head>
 
@@ -524,7 +525,7 @@ footer a:hover {
         <li class="nav-item"><a class="nav-link <?= ($segment == 'services' ? 'active' : '') ?>" href="<?= base_url('services'); ?>">Services</a></li>
         <li class="nav-item"><a class="nav-link <?= ($segment == 'providers' ? 'active' : '') ?>" href="<?= base_url('providers'); ?>">Providers</a></li>
         <li class="nav-item"><a class="nav-link <?= ($segment == 'about-us' ? 'active' : '') ?>" href="<?= base_url('about-us'); ?>">About Us</a></li>
-        <li class="nav-item"><a class="nav-link <?= ($segment == 'contact-us' ? 'active' : '') ?>" href="<?= base_url('contact-us'); ?>">Contact Us</a></li>
+        <li class="nav-item"><a class="nav-link <?= ($segment == 'contact' ? 'active' : '') ?>" href="<?= base_url('contact'); ?>">Contact Us</a></li>
       </ul>
       <div class="d-flex align-items-center">
         <div class="cart-icon me-3">
@@ -566,7 +567,7 @@ footer a:hover {
     <ul class="navbar-nav">
       <li class="nav-item"><a class="nav-link" href="<?= base_url(); ?>">Home</a></li>
       <li class="nav-item"><a class="nav-link" href="<?= base_url('about-us'); ?>">About Us</a></li>
-      <li class="nav-item"><a class="nav-link" href="<?= base_url('contact-us'); ?>">Contact Us</a></li>
+      <li class="nav-item"><a class="nav-link" href="<?= base_url('contact'); ?>">Contact Us</a></li>
       <li class="nav-item"><a class="nav-link" href="<?= base_url('provider'); ?>">Become Provider</a></li>
 
     </ul>
