@@ -179,6 +179,9 @@ private $PAYU_BASE_URL = "https://secure.payu.in";
     $email = filter_var($this->user['email'], FILTER_VALIDATE_EMAIL) 
         ? $this->user['email'] 
         : 'test@test.com';
+        // print_r($this->user['email']);p
+        // echo $email;
+        // die;
 
     $firstname = $this->user['name'];
     $phone = preg_replace('/\D/', '', $this->user['mobile']); // Ensure numeric
@@ -230,6 +233,7 @@ private $PAYU_BASE_URL = "https://secure.payu.in";
         "service_provider" => "payu_paisa",
         "order_id" => $order_id
     ];
+
 // echo "<pre>";
 // print_r($data);
 // die;

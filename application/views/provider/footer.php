@@ -148,6 +148,10 @@
 <script>
 const site_url = "<?= base_url(); ?>";
 </script>
+<script>
+    const BASE_URL = "<?= base_url(); ?>";
+    const GET_BOOKINGS_URL = "<?= base_url('provider/customers/get_bookings_ajax'); ?>";
+</script>
 <script src="<?= base_url('assets/js/custom.js') ?>?v=<?= time() ?>"></script>
 <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -266,87 +270,6 @@ $("#show_hide_password a").on('click', function (event) {
 
             });
   });
-
-  // notification serviceWorker
-
-
-
-
-
-const STORE_ID = <?= isset($user_data->id) ? (int) $user_data->id : 0 ?>;
-
-
-  if (!firebase.apps.length) {
-    // alert('enter in first condtion');
-    firebase.initializeApp(firebaseConfig);
-  }
-
-  if (!window.messaging) {
-     window.messaging = firebase.messaging();
-  }
-
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/firebase-messaging-sw.js')
-        .then(function (registration) {
-          console.log('ServiceWorker registered with scope:', registration.scope);
-
-        }, function (err) {
-          console.log('ServiceWorker registration failed:', err);
-        });
-    });
-
-  }
- google.charts.load('current', { packages: ['corechart'] });
-  google.charts.setOnLoadCallback(drawChart);
-
-  function drawChart() {
-    const data = google.visualization.arrayToDataTable([
-      ['Month', 'Orders'],
-      <?php
-        $months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
-        foreach ($months as $index => $month) {
-          $orderCount = isset($monthly_orders[$index]) ? $monthly_orders[$index] : 0;
-          echo "['$month', $orderCount],";
-        }
-      ?>
-    ]);
-
-    const options = {
-      legend: 'none',
-      curveType: 'function',
-      colors: ['#007bff'],
-      areaOpacity: 0.25,
-      pointSize: 6,
-      lineWidth: 3,
-      animation: {
-        startup: true,
-        duration: 1000,
-        easing: 'out'
-      },
-      hAxis: {
-        textStyle: { fontSize: 10, color: '#888' },
-        slantedText: true,
-        slantedTextAngle: 45
-      },
-      vAxis: {
-        textStyle: { fontSize: 10, color: '#888' },
-        gridlines: { color: '#e5e5e5' },
-        minValue: 0
-      },
-      chartArea: {
-        left: 30,
-        top: 10,
-        width: '90%',
-        height: '75%'
-      }
-    };
-
-    const chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
-  }
-
-  window.addEventListener('resize', drawChart);
 </script>
 
 </body>

@@ -106,15 +106,11 @@
 				</li>
 
 				<li>
-					<a href="javascript:;" class="has-arrow">
+					<a href="<?= base_url('customer');?>" class="">
 						<div class="parent-icon"><i class="bx bx-user"></i></div>
 						<div class="menu-title">Customers</div>
 					</a>
-					<ul>
-						<li> <a href="<?= base_url('customer'); ?>"><i class='bx bx-group'></i>All Customer</a></li>
-						<li> <a href="<?= base_url('add_customer'); ?>"><i class='bx bx-user-plus'></i>Add Customer</a>
-						</li>
-					</ul>
+					
 				</li>
 
 				<li>
@@ -124,8 +120,8 @@
 					</a>
 					<ul>
 						<li> <a href="<?= base_url('booking'); ?>"><i class='bx bx-calendar'></i>All Bookings</a></li>
-						<li> <a href="<?= base_url('add_bookings'); ?>"><i class='bx bx-calendar-plus'></i>Add
-								Booking</a></li>
+						<!-- <li> <a "><i class='bx bx-calendar-plus'></i>Add
+								Booking</a></li> -->
 					</ul>
 				</li>
 

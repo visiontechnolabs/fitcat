@@ -16,13 +16,6 @@ class Profile extends Provider_Controller
         $data['city'] = $this->general_model->getAll('cities', ['isActive' => 1]);
         $data['profile'] = $this->general_model->getOne('provider', ['isActive' => 1,'provider_id'=>$this->provider['id']]);
         $data['expertis'] = $this->general_model->getAll('expertise_tag', ['provider_id'=>$this->provider['id']]);
-// echo "<pre>";
-// print_r($data['provider']);
-// echo "<pre>";
-// print_r($data['profile']);
-// echo "<pre>";
-// print_r($data['expertis']);
-// die;
 
 
 

@@ -1,32 +1,29 @@
 <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-  <div class="carousel-inner">
-    <!-- Slide 1 -->
-    <div class="carousel-item active" style="background-image: url('<?= base_url('uploads/slider/1752841265_new_one.jpg'); ?>
-');">
-      <div class="carousel-caption">
-        <h1>Reliable & Affordable Plumbing Services!</h1>
-        <p>Expert plumbing solutions for homes & businesses—fast, professional, and available 24/7!</p>
-        <button class="btn btn-warning me-2">Book Now</button>
-        <button class="btn btn-outline-light">Explore Services</button>
-      </div>
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <?php $first = true; ?>
+      <?php foreach ($sliders as $slide): ?>
+        <div class="carousel-item <?= $first ? 'active' : '' ?>"
+          style="background-image: url('<?= base_url('uploads/slider/' . $slide->slider_image); ?>');">
+          <div class="carousel-caption">
+            <h1><?= htmlspecialchars($slide->slider_title) ?></h1>
+            <p><?= htmlspecialchars($slide->sub_title) ?></p>
+            <a href="<?= base_url('providers'); ?>" class="btn btn-warning me-2">Book Now</a>
+            <a href="<?= base_url('services'); ?>" class="btn btn-outline-light">Explore Services</a>
+
+          </div>
+        </div>
+        <?php $first = false; ?>
+      <?php endforeach; ?>
     </div>
-    <!-- Slide 2 -->
-    <div class="carousel-item" style="background-image: url('<?= base_url('uploads/slider/1752841265_new_one.jpg'); ?>
-');">
-      <div class="carousel-caption">
-        <h1>Quick & Reliable Services at Your Doorstep!</h1>
-        <p>From home cleaning to car repairs, get expert professionals whenever you need them.</p>
-        <button class="btn btn-warning me-2">Book Now</button>
-        <button class="btn btn-outline-light">Explore Services</button>
-      </div>
-    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </button>
   </div>
-  <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-    <span class="carousel-control-prev-icon"></span>
-  </button>
-  <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-    <span class="carousel-control-next-icon"></span>
-  </button>
+
 
   <!-- Floating Search Bar -->
   <div class="search-bar-container">
@@ -79,78 +76,47 @@
 <!-- near by section -->
 <section class="experts-section">
   <div class="container">
-    <h2 class="fw-bold"> Experts Nearby</h2>
-    <p class="text-primary mb-4">Trusted Professionals Ready To Assist You Anytime, Anywhere!</p>
+    <h2 class="fw-bold">Nearest Providers</h2>
+    <p class="text-primary mb-4">Providers closest to your location!</p>
 
     <div class="row g-4">
-      <!-- Expert 1 -->
-      <div class="col-md-4">
-        <div class="expert-card">
-          <div class="w-100">
-            <div class="expert-left">
-              <div class="expert-logo bg-primary">
-                <i class="fa fa-bolt text-white fs-4"></i>
+      <?php foreach ($nearest_providers as $np): ?>
+        <div class="col-md-4">
+          <div class="expert-card">
+            <div class="w-100">
+              <div class="expert-left">
+                <div class="expert-logo bg-primary">
+                  <img src="<?= base_url($np->profile_image) ?>" class="img-fluid"
+                    style="width:50px;height:50px;border-radius:50%;">
+                </div>
+                <div>
+                  <div class="expert-title"><?= $np->gym_name ?: $np->name ?></div>
+                  <div class="expert-services"><?= $np->total_services ?> Services</div>
+                </div>
               </div>
-              <div>
-                <div class="expert-title">Big Brand Electronic Service</div>
-                <div class="expert-services">08 Services</div>
-              </div>
-            </div>
-            <div class="expert-footer">
-              <span><i class="fa fa-star"></i> 5.0</span>
-              <span><i class="fa fa-map-marker-alt text-primary"></i> 300 Km</span>
-              <span class="arrow-icon"><i class="fa fa-chevron-right"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
+              <div class="expert-footer d-flex justify-content-center align-items-center position-relative">
+                <span>
+                  <i class="fa fa-map-marker-alt text-primary"></i>
+                  <?= round($np->distance, 1) ?> Km
+                </span>
+                <div class="d-flex justify-content-between align-items-center text-muted small px-1">
 
-      <!-- Expert 2 -->
-      <div class="col-md-4">
-        <div class="expert-card">
-          <div class="w-100">
-            <div class="expert-left">
-              <div class="expert-logo bg-dark">
-                <i class="fa fa-cogs text-white fs-4"></i>
-              </div>
-              <div>
-                <div class="expert-title">Piston Car Service</div>
-                <div class="expert-services">13 Services</div>
-              </div>
-            </div>
-            <div class="expert-footer">
-              <span><i class="fa fa-star"></i> 5.0</span>
-              <span><i class="fa fa-map-marker-alt text-primary"></i> 300 Km</span>
-              <span class="arrow-icon"><i class="fa fa-chevron-right"></i></span>
-            </div>
-          </div>
-        </div>
-      </div>
+                  <a href="<?= site_url('provider_details/' . $np->provider_id) ?>"
+                    class="view-more-btn d-inline-flex align-items-center">
+                    <span class="text-warning"><i class="fa fa-chevron-right"></i></span>
+                    <span class="view-more-text ms-2 fw-bold text-primary">View More</span>
+                  </a>
 
-      <!-- Expert 3 -->
-      <div class="col-md-4">
-        <div class="expert-card">
-          <div class="w-100">
-            <div class="expert-left">
-              <div class="expert-logo bg-warning">
-                <i class="fa fa-cut text-dark fs-4"></i>
+                </div>
               </div>
-              <div>
-                <div class="expert-title">QUB Saloon</div>
-                <div class="expert-services">13 Services</div>
-              </div>
-            </div>
-            <div class="expert-footer">
-              <span><i class="fa fa-star"></i> 5.0</span>
-              <span><i class="fa fa-map-marker-alt text-primary"></i> 300 Km</span>
-              <span class="arrow-icon"><i class="fa fa-chevron-right"></i></span>
             </div>
           </div>
         </div>
-      </div>
+      <?php endforeach; ?>
     </div>
   </div>
 </section>
+
 <!-- near by end -->
 
 <!-- edemand banner -->
@@ -198,18 +164,21 @@
                 </div>
               </div>
               <div class="expert-footer d-flex justify-content-center align-items-center position-relative">
-                <span class="mx-auto"><i class="fa fa-map-marker-alt text-primary"></i>
-                  <?= $provider->distance ?? 'N/A'; ?> Km</span>
-                <div class="d-flex justify-content-between align-items-center text-muted small px-1">
-                       
-                        <a href="<?= site_url('provider_details/' . $provider->provider_id) ?>"
-                            class="view-more-btn d-inline-flex align-items-center">
-                            <span class="text-warning"><i class="fa fa-chevron-right"></i></span>
-                            <span class="view-more-text ms-2 fw-bold text-primary">View More</span>
-                        </a>
+                <span>
+                  <i class="fa fa-map-marker-alt text-primary"></i>
+                  <?= isset($provider->distance) ? round($provider->distance, 1) . ' Km' : 'N/A' ?>
+                </span>
 
-                    </div>       
-                   </div>
+                <div class="d-flex justify-content-between align-items-center text-muted small px-1">
+
+                  <a href="<?= site_url('provider_details/' . $provider->provider_id) ?>"
+                    class="view-more-btn d-inline-flex align-items-center">
+                    <span class="text-warning"><i class="fa fa-chevron-right"></i></span>
+                    <span class="view-more-text ms-2 fw-bold text-primary">View More</span>
+                  </a>
+
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -242,17 +211,20 @@
                 </div>
               </div>
               <div class="expert-footer d-flex justify-content-center align-items-center position-relative">
-                <span class="mx-auto"><i class="fa fa-map-marker-alt text-primary"></i>
-                  <?= $provider->distance ?? 'N/A'; ?> Km</span>
-                <div class="d-flex justify-content-between align-items-center text-muted small px-1">
-                       
-                        <a href="<?= site_url('provider_details/' . $provider->provider_id) ?>"
-                            class="view-more-btn d-inline-flex align-items-center">
-                            <span class="text-warning"><i class="fa fa-chevron-right"></i></span>
-                            <span class="view-more-text ms-2 fw-bold text-primary">View More</span>
-                        </a>
+                <span>
+                  <i class="fa fa-map-marker-alt text-primary"></i>
+                  <?= isset($provider->distance) ? round($provider->distance, 1) . ' Km' : 'N/A' ?>
+                </span>
 
-                    </div> 
+                <div class="d-flex justify-content-between align-items-center text-muted small px-1">
+
+                  <a href="<?= site_url('provider_details/' . $provider->provider_id) ?>"
+                    class="view-more-btn d-inline-flex align-items-center">
+                    <span class="text-warning"><i class="fa fa-chevron-right"></i></span>
+                    <span class="view-more-text ms-2 fw-bold text-primary">View More</span>
+                  </a>
+
+                </div>
               </div>
             </div>
           </div>

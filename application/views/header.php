@@ -469,11 +469,19 @@ footer a:hover {
     color: #fff;
   }
 
-  @media (min-width: 769px) {
-    .mobile-bottom-menu {
-      display: none;
+   @media (max-width: 768px) {
+      .top-bar { display:none!important; }
+      .carousel-caption { top:20%; left:5%; max-width:90%; }
+      .carousel-caption h1 { font-size:28px; }
+      .carousel-caption p { font-size:16px; }
+      .search-bar-container { flex-direction:column; padding:10px; }
+      .search-bar-container button { width:100%; }
+      .service-card { flex-direction:column; text-align:center; }
+      .expert-card { flex-direction:column; gap:15px; text-align:center; align-items:center; }
+      .banner-text, .banner-images { text-align:center; width:100%; }
+      .edemand-banner { padding:20px; }
     }
-  }
+    @media (min-width:769px){ .mobile-bottom-menu{ display:none; } }
   
   </style>
 </head>
@@ -483,7 +491,7 @@ footer a:hover {
   <div class="top-bar d-flex justify-content-between align-items-center">
     <a href="<?= base_url('provider/sing_up'); ?>" style="font-size: 1rem;
     line-height: 1.5rem;"><i class="fa fa-user-gear me-1"></i> Become Provider</a>
-    <div class="d-flex align-items-center">
+    <!-- <div class="d-flex align-items-center">
       <select class="form-select form-select-sm me-2" style="width: auto;">
         <option>English</option>
         <option>Hindi</option>
@@ -492,7 +500,7 @@ footer a:hover {
       <div class="form-check form-switch m-0">
         <input class="form-check-input" type="checkbox">
       </div>
-    </div>
+    </div> -->
   </div>
 
   <!-- Navbar -->
@@ -542,7 +550,7 @@ footer a:hover {
               <li><a class="dropdown-item" href="<?= base_url('profile');?>">Profile</a></li>
               <li><a class="dropdown-item" href="#">My Bookings</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="logout.php">Logout</a></li>
+              <li><a class="dropdown-item" href="<?=base_url('logout');?>">Logout</a></li>
             </ul>
           <?php else: ?>
             <a href="<?= base_url('login'); ?>" class="btn btn-outline-primary">

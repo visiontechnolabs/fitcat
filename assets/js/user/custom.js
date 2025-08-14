@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lon}&format=json`)
       .then(response => response.json())
       .then(data => {
-        // Try different fallbacks if city is missing
         const city =
           data.address.city ||
           data.address.town ||
@@ -31,11 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const location = `${city}, ${state}, ${country}`;
         locationInput.value = location;
 
-        // Save location to session via AJAX
         fetch(site_url + "home/save_location", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: "location=" + encodeURIComponent(location)
+          body:
+            "lat=" + encodeURIComponent(lat) +
+            "&lng=" + encodeURIComponent(lon) +
+            "&address=" + encodeURIComponent(location)
+        })
+        .then(() => {
+          location.reload(); 
         });
       })
       .catch(() => {
@@ -47,6 +51,8 @@ document.addEventListener("DOMContentLoaded", function () {
     locationInput.placeholder = "Permission denied or unavailable";
   }
 });
+
+
 
 
 document.addEventListener("DOMContentLoaded", function () {

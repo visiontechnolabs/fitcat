@@ -92,6 +92,12 @@ $route['providers'] = 'profile';
 $route['provider_details/(:num)'] = 'profile/provider_details/$1';
 $route['services'] = 'services';
 $route['login'] = 'login';
+$route['logout'] = 'login/logout';
+$route['customer'] = 'provider/customers';
+$route['booking'] = 'provider/customers/booking';
+
+
+
 $route['sign_in'] = 'login/sign_in';
 $route['cart'] = 'cart';
 $route['profile'] = 'profile/profile';

@@ -88,4 +88,21 @@
             </div>
         </div>
     </div>
+
+
 </div>
+<script src="<?= base_url('assets/js/jquery.min.js') ?>"></script>
+
+<script>
+    document
+	.getElementById("slider_image")
+	.addEventListener("change", function (e) {
+		const reader = new FileReader();
+		reader.onload = function (event) {
+			document.getElementById("previewImage").src = event.target.result;
+		};
+		if (e.target.files[0]) {
+			reader.readAsDataURL(e.target.files[0]);
+		}
+	});
+</script>

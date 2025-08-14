@@ -16,6 +16,115 @@ $(document).ready(function () {
 			preview.src = defaultImage;
 		}
 	});
+	let pageIndex = 1;
+let searchQuery = '';
+
+function fetchBookings(page = 1, search = '') {
+    $.ajax({
+        url: GET_BOOKINGS_URL,
+        type: 'GET',
+        data: {
+            page: page,
+            search: search
+        },
+        success: function (response) {
+            const data = typeof response === 'string' ? JSON.parse(response) : response;
+            console.log('Fetched data:', data);
+            renderBookings(data.bookings, data.page, data.limit);
+            renderPagination(data.page, data.total, data.limit);
+        },
+        error: function (xhr, status, error) {
+            console.error('AJAX Error:', status, error);
+            $('#bookingTableBody').html('<tr><td colspan="6" class="text-center">Error loading bookings</td></tr>');
+        }
+    });
+}
+
+function renderBookings(bookings, page, limit) {
+    let html = '';
+    const offset = (page - 1) * limit;
+
+    if (bookings.length === 0) {
+        html = '<tr><td colspan="6" class="text-center">No bookings found</td></tr>';
+    } else {
+        bookings.forEach((booking, index) => {
+            html += `
+                <tr>
+                    <td>${offset + index + 1}</td>
+                    <td>${booking.name}</td>
+                    <td>${booking.mobile}</td>
+                    <td>${booking.created_at}</td>
+                    <td>₹${booking.total}</td>
+                    <td>
+                        <a href="${BASE_URL}provider/booking/${booking.id}" class="btn btn-sm btn-primary">View</a>
+                    </td>
+                </tr>`;
+        });
+    }
+    $('#bookingTableBody').html(html);
+}
+
+function renderPagination(current, total, limit) {
+    let totalPages = Math.ceil(total / limit);
+    let pagination = '';
+
+    if (totalPages <= 1) {
+        $('#paginationContainer').html('');
+        return;
+    }
+
+    if (current > 1) {
+        pagination += `<li class="page-item"><a class="page-link" href="#" data-page="${current - 1}">Previous</a></li>`;
+    }
+
+    let startPage, endPage;
+    if (totalPages <= 3) {
+        startPage = 1;
+        endPage = totalPages;
+    } else if (current <= 2) {
+        startPage = 1;
+        endPage = 3;
+    } else if (current >= totalPages - 1) {
+        startPage = totalPages - 2;
+        endPage = totalPages;
+    } else {
+        startPage = current - 1;
+        endPage = current + 1;
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+        pagination += `
+            <li class="page-item ${i === current ? 'active' : ''}">
+                <a class="page-link" href="#" data-page="${i}">${i}</a>
+            </li>`;
+    }
+
+    if (current < totalPages) {
+        pagination += `<li class="page-item"><a class="page-link" href="#" data-page="${current + 1}">Next</a></li>`;
+    }
+
+    $('#paginationContainer').html(pagination);
+}
+
+$(document).ready(function () {
+    fetchBookings(pageIndex);
+
+    $(document).on('click', '#paginationContainer .page-link', function (e) {
+        e.preventDefault();
+        const page = parseInt($(this).attr('data-page'), 10);
+        if (!isNaN(page)) {
+            pageIndex = page;
+            fetchBookings(pageIndex, searchQuery);
+        }
+    });
+
+    $('input[type="text"]').on('input', function () {
+        searchQuery = $(this).val();
+        pageIndex = 1;
+        fetchBookings(pageIndex, searchQuery);
+    });
+});
+
 
 	// Bootstrap validation + AJAX Submit with SweetAlert
 	$("#CategoryForm").on("submit", function (e) {
@@ -349,6 +458,67 @@ $(document).on("click", ".toggle-status-btn_service", function () {
 		},
 	});
 });
+// customer pagiantion
+$(document).ready(function () {
+	function loadCustomers(page = 1, search = "") {
+		$.ajax({
+			url: site_url + "provider/customers/get_customers_ajax",
+			type: "GET",
+			data: { page: page, search: search },
+			dataType: "json",
+			success: function (res) {
+				let html = "";
+				$.each(res.customers, function (index, c) {
+					html += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${c.name}</td>
+                            <td>${c.mobile}</td>
+                            <td>${c.email}</td>
+							<td>
+						<a href="<?= base_url('customers/view/' . $item->id); ?>" class="btn btn-primary btn-sm radius-30 px-4">
+							View Details
+						</a>
+						</td>
+						
+
+                        </tr>
+                    `;
+				});
+				$("#customerTableBody").html(html);
+
+				// Pagination
+				let totalPages = Math.ceil(res.total / res.limit);
+				let pagHtml = "";
+				for (let i = 1; i <= totalPages; i++) {
+					pagHtml += `<li class="page-item ${
+						res.page == i ? "active" : ""
+					}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+				}
+				$(".pagination").html(pagHtml);
+			},
+		});
+	}
+
+	// Initial load
+	loadCustomers();
+
+	// Pagination click
+	$(document).on("click", ".pagination .page-link", function (e) {
+		e.preventDefault();
+		let page = $(this).data("page");
+		let search = $(".form-control").val();
+		loadCustomers(page, search);
+	});
+
+	// Search input
+	$(".form-control").on("input", function () {
+		let search = $(this).val();
+		loadCustomers(1, search);
+	});
+});
+
+// city & state toggel
 $(document).on("click", ".toggle-status-btn_city", function () {
 	const button = $(this);
 	const postId = button.data("id");
@@ -595,7 +765,6 @@ $(document).ready(function () {
 		offset = 0;
 		loadPartners(offset, search);
 	});
-	
 
 	$(document).on("click", ".btn-toggle-status", function () {
 		let partnerId = $(this).data("id");
@@ -1502,14 +1671,4 @@ document
 		}
 	});
 
-document
-	.getElementById("slider_image")
-	.addEventListener("change", function (e) {
-		const reader = new FileReader();
-		reader.onload = function (event) {
-			document.getElementById("previewImage").src = event.target.result;
-		};
-		if (e.target.files[0]) {
-			reader.readAsDataURL(e.target.files[0]);
-		}
-	});
+
