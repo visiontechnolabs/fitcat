@@ -90,5 +90,40 @@ public function get_with_search($table, $params = [], $limit = 10, $offset = 0)
     $query = $this->db->get($table);
     return $query->result_array();
 }
+public function get_customers_with_orders($limit, $offset)
+    {
+        // Count total customers (role = 0)
+        $this->db->where('role', 0);
+        $total = $this->db->count_all_results('users');
+
+        // Fetch paginated customers
+        $this->db->select('id, name, mobile');
+        $this->db->where('role', 0);
+        $this->db->limit($limit, $offset);
+        $customers = $this->db->get('users')->result_array();
+
+        foreach ($customers as &$cust) {
+            // Fetch orders for this customer
+            $this->db->select('id, total,txnid, status, created_at');
+            $this->db->where('user_id', $cust['id']);
+            $orders = $this->db->get('orders')->result_array();
+
+            foreach ($orders as &$order) {
+                // Fetch provider name from order_items table
+                $this->db->select('name');
+                $this->db->where('order_id', $order['id']);
+                $items = $this->db->get('order_items')->result_array();
+                $order['provider_names'] = array_column($items, 'name');
+            }
+
+            $cust['orders'] = $orders;
+            $cust['total_transactions'] = count($orders);
+        }
+
+        return [
+            'customers' => $customers,
+            'total' => $total
+        ];
+    }
 
     }

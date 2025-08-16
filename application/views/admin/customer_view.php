@@ -31,7 +31,6 @@
 										<th>Name</th>
 									    <th>Mobile</th>
                                         <th>Email</th>
-                                        <th>Address</th>
                                         <th>Actions</th>
 									</tr>
 								</thead>
@@ -59,4 +58,135 @@
 
 			</div>
 		</div>
-		
+		<script>
+document.addEventListener("DOMContentLoaded", function() {
+    loadCustomers(1);
+
+    document.querySelector('.radius-30').addEventListener('input', function() {
+        loadCustomers(1); // reload first page on search
+    });
+});
+
+function loadCustomers(page) {
+    const search = document.querySelector('.radius-30').value;
+
+    fetch("<?= base_url('admin/customers/fetch_customers?page='); ?>" + page + "&search=" + encodeURIComponent(search))
+        .then(response => response.json())
+        .then(data => {
+            renderCustomers(data.customers, data.page, data.limit);
+            renderPagination(data.total, data.limit, data.page);
+        });
+}
+
+function renderCustomers(customers, page, limit) {
+    let html = '';
+    if (customers.length === 0) {
+        html = `<tr><td colspan="5" class="text-center text-muted">No customers found.</td></tr>`;
+    } else {
+        customers.forEach((cust, index) => {
+            html += `
+                <tr>
+                    <td>${(page-1)*limit + index + 1}</td>
+                    <td>${cust.name}</td>
+                    <td>${cust.mobile}</td>
+                    <td>${cust.email}</td>
+ <td>
+        <div class="d-flex order-actions align-items-center">
+            <a href="${site_url}loginAsPartner/${cust.id}" 
+               class="ms-2" title="Show all Booking">
+                <i class="bx bx-log-in"></i>
+            </a>
+            <a href="javascript:void(0);" 
+               class="btn-toggle-status ms-2"
+               data-id="${cust.id}"
+               data-status="${cust.isActive}"
+               title="${cust.isActive == 1 ? 'Deactivate' : 'Activate'}">
+                <i class="bx ${cust.isActive == 1 ? 'bx-user-x' : 'bx-user-check'}"></i>
+            </a>
+        </div>
+    </td>             
+							 </tr>
+            `;
+        });
+    }
+    document.getElementById('customerTableBody').innerHTML = html;
+}
+
+function renderPagination(total, limit, current) {
+    const pages = Math.ceil(total / limit);
+    let html = '';
+    if (pages <= 1) {
+        document.querySelector('.pagination').innerHTML = '';
+        return;
+    }
+
+    html += `<li class="page-item ${current==1?'disabled':''}">
+                <a class="page-link" href="#" onclick="${current==1?'return false;':'loadCustomers('+(current-1)+');return false;'}">Previous</a>
+             </li>`;
+
+    let start = Math.max(1, current-1);
+    let end = Math.min(pages, current+1);
+    if (current==1) end = Math.min(pages,3);
+    if (current==pages) start = Math.max(1,pages-2);
+
+    for (let i=start; i<=end; i++) {
+        html += `<li class="page-item ${current==i?'active':''}">
+                    <a class="page-link" href="#" onclick="loadCustomers(${i});return false;">${i}</a>
+                 </li>`;
+    }
+
+    html += `<li class="page-item ${current==pages?'disabled':''}">
+                <a class="page-link" href="#" onclick="${current==pages?'return false;':'loadCustomers('+(current+1)+');return false;'}">Next</a>
+             </li>`;
+
+    document.querySelector('.pagination').innerHTML = html;
+}
+$(document).on("click", ".btn-toggle-status", function () {
+		let partnerId = $(this).data("id");
+		let currentStatus = $(this).data("status");
+		let newStatus = currentStatus == 1 ? 0 : 1;
+
+		let actionText = newStatus == 0 ? "deactivate" : "activate";
+
+		Swal.fire({
+			title: `Are you sure you want to ${actionText} this user?`,
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonText: `Yes, ${actionText}!`,
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url: site_url + "admin/customer/togglePartnerStatus",
+					type: "POST",
+					data: { partner_id: partnerId, status: newStatus },
+					dataType: "json",
+					success: function (response) {
+						if (response.status === "success") {
+							Swal.fire({
+								icon: "success",
+								title: `Partner ${actionText}d successfully.`,
+								timer: 1500,
+								showConfirmButton: false,
+							});
+							loadPartners(offset, $(".radius-30").val());
+						} else {
+							Swal.fire({
+								icon: "error",
+								title: "Failed!",
+								text: response.message,
+							});
+						}
+					},
+					error: function () {
+						Swal.fire({
+							icon: "error",
+							title: "Error",
+							text: "Something went wrong!",
+						});
+					},
+				});
+			}
+		});
+	});
+</script>
+

@@ -21,21 +21,35 @@ class Services extends User_Controller
 
     }
 
-    public function index(){
-       $this->db->select('service.*, users.gym_name, provider.city');
-$this->db->from('service');
-$this->db->join('provider', 'provider.provider_id = service.provider_id', 'left');
-$this->db->join('users', 'users.id = provider.provider_id', 'left');
-$this->db->where('service.isActive', 1);
-$this->data['services'] = $this->db->get()->result();
+   public function index()
+{
+    // Just load the view — do NOT fetch all services here
+    $this->load->view('header');
+    $this->load->view('service_view'); // service_view has empty container for AJAX
+    $this->load->view('footer');
+}
+    public function fetch_services()
+{
+    $page = $this->input->get('page') ?? 1;
+    $limit = 8; // how many cards per page
+    $offset = ($page - 1) * $limit;
 
-        // echo "<pre>";
-        // print_r($this->data['service']);
-        // die;
+    $this->db->select('service.*, users.gym_name, provider.city');
+    $this->db->from('service');
+    $this->db->join('provider', 'provider.provider_id = service.provider_id', 'left');
+    $this->db->join('users', 'users.id = provider.provider_id', 'left');
+    $this->db->where('service.isActive', 1);
+    $total = $this->db->count_all_results('', false);
 
-        $this->load->view('header');
-        $this->load->view('service_view',$this->data);
-        $this->load->view('footer');
+    $this->db->limit($limit, $offset);
+    $services = $this->db->get()->result();
 
-    }
+    echo json_encode([
+        'services' => $services,
+        'total'    => $total,
+        'limit'    => $limit,
+        'page'     => $page
+    ]);
+}
+
 }
